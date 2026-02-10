@@ -61,7 +61,7 @@
 
   .toast {
     position: absolute;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,0.95);
     color: #333;
     padding: 8px 12px;
     border-radius: 12px;
@@ -71,6 +71,7 @@
     transition: opacity 0.3s, transform 0.3s;
     pointer-events: none;
     white-space: nowrap;
+    z-index: 100;
   }
 
   .heart {
@@ -100,7 +101,15 @@
 
   @media (max-width: 500px) {
     h1 { font-size: 1.8rem; margin: 15px; }
-    button { width: 120px; padding: 12px 20px; font-size: 1.1rem; }
+    #button-container { 
+        flex-direction: column; 
+        gap: 15px; 
+    }
+    button { 
+        width: 140px; 
+        padding: 12px 20px; 
+        font-size: 1.1rem; 
+    }
   }
 </style>
 </head>
@@ -113,14 +122,13 @@
   <button id="no">No</button>
 </div>
 
-<!-- YouTube player container -->
 <div id="player"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 let player;
 
-// YouTube IFrame API
+// YouTube player setup
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '0',
@@ -139,7 +147,7 @@ function onYouTubeIframeAPIReady() {
     events: {
       'onReady': (event) => {
         event.target.playVideo();
-        // Segment loop
+        // Segment loop 47s-79s
         setInterval(() => {
           if(player.getCurrentTime() >= 79){
             player.seekTo(47);
@@ -165,7 +173,7 @@ yesBtn.addEventListener("click", () => {
   alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
 });
 
-// Messages for No button
+// No button messages
 const messages = [
   "💘 Nope… not happening!",
   "💕 Still no! You can’t escape me!",
@@ -174,21 +182,30 @@ const messages = [
   "❤️ One more click… and I’m gone! 😱"
 ];
 
-// No button shrinking
 let clickCount = 0;
 const maxClicks = 5;
 let currentWidth = noBtn.offsetWidth;
 let currentHeight = noBtn.offsetHeight;
 let currentFont = parseFloat(window.getComputedStyle(noBtn).fontSize);
 
+// Show toast depending on screen size
 function showToast(message, targetBtn){
   const toast = document.createElement('div');
   toast.className = 'toast';
   toast.innerText = message;
 
   const rect = targetBtn.getBoundingClientRect();
-  toast.style.left = rect.right + 10 + 'px';
-  toast.style.top = rect.top + 'px';
+
+  if(window.innerWidth <= 500){
+    // Mobile: show below the button
+    toast.style.left = rect.left + 'px';
+    toast.style.top = rect.bottom + 10 + 'px';
+  } else {
+    // Desktop: show to the right
+    toast.style.left = rect.right + 10 + 'px';
+    toast.style.top = rect.top + 'px';
+  }
+
   document.body.appendChild(toast);
 
   setTimeout(() => {
@@ -201,20 +218,30 @@ function showToast(message, targetBtn){
     toast.style.transform = 'translateY(-20px)';
     setTimeout(() => {
       toast.remove();
-      if(clickCount === maxClicks) {
-        noBtn.style.display = 'none';
-        yesBtn.classList.add('pulse'); // Start pulsing Yes
-      }
     }, 300);
   }, 2000);
 }
 
+// Shrink No button
 function shrinkNoButton(){
-  if(clickCount >= maxClicks) return;
+  if(clickCount < maxClicks-1){
+    // First 4 clicks: shrink + toast
+    clickCount++;
+    shrinkButton();
+    showToast(messages[clickCount-1], noBtn);
+  } else if(clickCount === maxClicks-1){
+    // 5th click: show "one more click" message
+    clickCount++;
+    showToast(messages[clickCount-1], noBtn);
+  } else {
+    // 6th click: disappear
+    noBtn.style.display = 'none';
+    yesBtn.classList.add('pulse');
+  }
+}
 
-  clickCount++;
+function shrinkButton(){
   const shrinkFactor = 0.85;
-
   currentWidth *= shrinkFactor;
   currentHeight *= shrinkFactor;
   currentFont *= shrinkFactor;
@@ -223,14 +250,12 @@ function shrinkNoButton(){
   noBtn.style.height = currentHeight + 'px';
   noBtn.style.fontSize = currentFont + 'px';
   noBtn.style.padding = (15 * Math.pow(shrinkFactor, clickCount)) + 'px ' + (30 * Math.pow(shrinkFactor, clickCount)) + 'px';
-
-  showToast(messages[clickCount-1], noBtn);
 }
 
 noBtn.addEventListener('click', shrinkNoButton);
 noBtn.addEventListener('touchstart', shrinkNoButton);
 
-// Beating hearts
+// Beating hearts in background
 function createHeart(){
   const heart = document.createElement('div');
   heart.className = 'heart';
@@ -238,16 +263,13 @@ function createHeart(){
   heart.style.left = Math.random() * window.innerWidth + 'px';
   heart.style.top = Math.random() * window.innerHeight + 'px';
   heart.style.fontSize = (10 + Math.random()*30) + 'px';
-  document.body.appendChild(heart);
-
-  // If hovering over Yes, hearts grow
   if(yesBtn.matches(':hover')) heart.style.transform = 'scale(2)';
-
+  document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 1000);
 }
 setInterval(createHeart, 200);
 
-// Optional: more hearts when Yes is clicked
+// Extra hearts when hovering Yes
 yesBtn.addEventListener('mouseenter', () => {
   for(let i=0;i<10;i++) setTimeout(createHeart, i*100);
 });
