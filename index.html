@@ -5,35 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
+  /* Body and page styling */
   body {
     font-family: Arial, sans-serif;
-    text-align: center;
     background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
-    height: 100vh;
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     overflow: hidden;
+    text-align: center;
   }
 
+  /* Header styling */
   h1 {
     color: #b3003b;
-    padding: 0 15px;
-    font-size: 2.5rem;
-    z-index: 1;
+    font-size: 2.2rem;
+    margin: 20px;
   }
 
+  /* Buttons styling */
   button {
     font-size: 1.2rem;
     padding: 14px 28px;
-    margin: 15px;
+    margin: 10px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    z-index: 1;
+    transition: transform 0.2s;
+    z-index: 2;
     position: relative;
+  }
+
+  button:hover {
+    transform: scale(1.1);
   }
 
   #yes {
@@ -45,12 +53,13 @@
     background-color: #6c757d;
     color: white;
     position: absolute;
-    top: 60%;
+    top: 65%;
     left: 50%;
+    touch-action: none; /* Helps mobile drag/tap */
   }
 
   iframe {
-    display: none; /* hide music player */
+    display: none; /* hide background music player */
   }
 </style>
 </head>
@@ -60,32 +69,59 @@
 <button id="yes">Yes 💖</button>
 <button id="no">No 😏</button>
 
-<!-- Background music muted to allow autoplay -->
+<!-- Background music, muted for autoplay -->
 <iframe src="https://www.youtube.com/embed/0FIsCGRCKj8?autoplay=1&mute=1&loop=1&playlist=0FIsCGRCKj8" allow="autoplay"></iframe>
 
 <script>
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
 
+  // YES button click
   yesBtn.addEventListener("click", () => {
     alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
   });
 
-  noBtn.addEventListener("click", () => {
-    // Move button to a random position inside the viewport
-    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+  // NO button click – moves randomly
+  noBtn.addEventListener("click", moveNoButton);
+
+  // Make NO button move on mobile tap as well
+  noBtn.addEventListener("touchstart", moveNoButton);
+
+  function moveNoButton() {
+    const padding = 20; // safe margin
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
 
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
 
-    // Random playful message
     const messages = [
       "Whoa! Not even an 'almost'? 😭",
       "Stuti!! That’s cruel 💔",
       "You can’t escape fate 😌",
       "Nooo! My heart!",
-      "This is getting dra
+      "This is getting dramatic… and so am I 🎭"
+    ];
+
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    alert(msg);
+  }
+
+  // Optional: reposition NO button if screen resizes (responsive)
+  window.addEventListener("resize", () => {
+    // keep the button inside view
+    const left = parseFloat(noBtn.style.left) || 0;
+    const top = parseFloat(noBtn.style.top) || 0;
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+    if (left > maxX) noBtn.style.left = maxX + "px";
+    if (top > maxY) noBtn.style.top = maxY + "px";
+  });
+</script>
+
+</body>
+</html>
