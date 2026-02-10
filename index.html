@@ -21,18 +21,18 @@
 
   h1 {
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin: 20px;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
   }
 
   #button-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     align-items: center;
     margin-top: 30px;
-    position: relative;
   }
 
   button {
@@ -41,14 +41,12 @@
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 2;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
   }
 
   button:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
 
   #yes {
@@ -59,26 +57,6 @@
   #no {
     background-color: #6c757d;
     color: white;
-    width: 120px;
-    height: 50px;
-    font-size: 1.2rem;
-    transition: width 0.2s, height 0.2s, font-size 0.2s;
-    border-radius: 12px;
-  }
-
-  /* Toast messages */
-  .toast {
-    position: absolute;
-    background-color: rgba(255,255,255,0.9);
-    color: #333;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    pointer-events: none;
-    white-space: nowrap;
   }
 
   /* Beating hearts */
@@ -96,9 +74,38 @@
     50% { transform: scale(1.5); }
   }
 
+  /* Toast messages */
+  .toast {
+    position: absolute;
+    background-color: rgba(255,255,255,0.9);
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
   iframe {
     display: none;
   }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    h1 {
+      font-size: 1.8rem;
+      margin: 15px;
+    }
+    button {
+      width: 120px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -123,95 +130,10 @@ yesBtn.addEventListener("click", () => {
   alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
 });
 
-// Shrinking No button with disappearance after 5 clicks
-let shrinkFactor = 0.9;
-let minSize = 30;
+// No button shrinking using scale and 5 clicks
 let clickCount = 0;
-let maxClicks = 5;
+const maxClicks = 5;
+const shrinkFactor = 0.85;
 
 const messages = [
-  "💘 Nope… not happening!",                  // 1st click
-  "💕 Still no! You can’t escape me!",       // 2nd click
-  "💖 Are you trying? Cute, but NO!",        // 3rd click
-  "💞 Haha! Giving up is not an option! 💖", // 4th click
-  "❤️ One more click… and I’m gone! 😱"      // 5th click
-];
-
-// Function to show toast
-function showToast(message, targetBtn) {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerText = message;
-  
-  // Position toast to the right of the button
-  const rect = targetBtn.getBoundingClientRect();
-  toast.style.left = rect.right + 10 + 'px';
-  toast.style.top = rect.top + 'px';
-  document.body.appendChild(toast);
-
-  // Animate in
-  setTimeout(() => {
-    toast.style.opacity = 1;
-    toast.style.transform = 'translateY(-10px)';
-  }, 10);
-
-  // Remove after 2s
-  setTimeout(() => {
-    toast.style.opacity = 0;
-    toast.style.transform = 'translateY(-20px)';
-    setTimeout(() => toast.remove(), 300);
-  }, 2000);
-}
-
-function shrinkNoButton() {
-  clickCount++;
-
-  if (clickCount >= maxClicks) {
-    noBtn.style.display = 'none';
-    showToast("No button disappeared! ✅", yesBtn);
-    return;
-  }
-
-  const currentWidth = noBtn.offsetWidth;
-  const currentHeight = noBtn.offsetHeight;
-
-  const newWidth = Math.max(currentWidth * shrinkFactor, minSize);
-  const newHeight = Math.max(currentHeight * shrinkFactor, minSize);
-
-  noBtn.style.width = newWidth + "px";
-  noBtn.style.height = newHeight + "px";
-  noBtn.style.fontSize = (newHeight * 0.5) + "px";
-
-  showToast(messages[clickCount - 1], noBtn);
-}
-
-noBtn.addEventListener("click", shrinkNoButton);
-noBtn.addEventListener("touchstart", shrinkNoButton);
-
-// Beating hearts animation
-function createHeart() {
-  const heart = document.createElement('div');
-  heart.classList.add('heart');
-  heart.innerHTML = '💖';
-  heart.style.left = Math.random() * window.innerWidth + 'px';
-  heart.style.top = Math.random() * window.innerHeight + 'px';
-  heart.style.fontSize = (10 + Math.random() * 30) + 'px';
-  document.body.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 1000);
-}
-setInterval(createHeart, 200);
-
-// Unmute YouTube after first click (bypass autoplay restriction)
-function unmuteYT() {
-  const player = document.getElementById('yt-player');
-  player.src = "https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0";
-  document.removeEventListener('click', unmuteYT);
-}
-document.addEventListener('click', unmuteYT);
-
-</script>
-</body>
-</html>
+  "💘 Nope… not happening!"
