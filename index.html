@@ -5,24 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
+  /* Gradient Background */
   body {
     font-family: Arial, sans-serif;
-    background-color: #ff0000; /* Solid red background */
     margin: 0;
     padding: 0;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
     overflow: hidden;
     text-align: center;
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
   }
 
   h1 {
     color: #fff;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin: 20px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
   }
 
   #button-container {
@@ -36,17 +38,19 @@
   }
 
   button {
-    font-size: 1.2rem;
-    padding: 14px 28px;
+    font-size: 1.3rem;
+    padding: 15px 30px;
     border: none;
-    border-radius: 12px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
     z-index: 2;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   }
 
   button:hover {
     transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
 
   #yes {
@@ -62,6 +66,25 @@
     left: 50%;
     transform: translate(-50%, -50%);
     touch-action: none;
+    width: 120px;
+    height: 50px;
+    font-size: 1.2rem;
+    transition: width 0.2s, height 0.2s, font-size 0.2s;
+    border-radius: 12px;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: absolute;
+    color: #fff;
+    font-size: 20px;
+    animation: float 5s linear infinite;
+    user-select: none;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
   }
 
   iframe {
@@ -78,7 +101,7 @@
   <button id="no">No 😏</button>
 </div>
 
-<iframe src="https://www.youtube.com/embed/0FIsCGRCKj8?autoplay=1&mute=1&loop=1&playlist=0FIsCGRCKj8" allow="autoplay"></iframe>
+<iframe id="yt-player" src="https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0" allow="autoplay"></iframe>
 
 <script>
   const yesBtn = document.getElementById("yes");
@@ -88,40 +111,49 @@
     alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
   });
 
-  function moveNoButton() {
-    const padding = 10; // safe margin
-    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+  let shrinkFactor = 0.9;
+  let minSize = 30;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
+  function shrinkNoButton() {
+    const currentWidth = noBtn.offsetWidth;
+    const currentHeight = noBtn.offsetHeight;
 
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
+    const newWidth = Math.max(currentWidth * shrinkFactor, minSize);
+    const newHeight = Math.max(currentHeight * shrinkFactor, minSize);
+
+    noBtn.style.width = newWidth + "px";
+    noBtn.style.height = newHeight + "px";
+    noBtn.style.fontSize = (newHeight * 0.4) + "px";
 
     const messages = [
-      "Whoa! Not even an 'almost'? 😭",
-      "Stuti!! That’s cruel 💔",
-      "You can’t escape fate 😌",
-      "Nooo! My heart!",
-      "This is getting dramatic… and so am I 🎭"
+      "Whoa! It's shrinking! 😱",
+      "Keep trying! 💔",
+      "Almost there… 😏",
+      "Getting tiny, just like my hope 😅",
+      "This button is scared of you! 🫣"
     ];
 
     alert(messages[Math.floor(Math.random() * messages.length)]);
   }
 
-  noBtn.addEventListener("click", moveNoButton);
-  noBtn.addEventListener("touchstart", moveNoButton);
+  noBtn.addEventListener("click", shrinkNoButton);
+  noBtn.addEventListener("touchstart", shrinkNoButton);
 
-  window.addEventListener("resize", () => {
-    const left = parseFloat(noBtn.style.left) || 0;
-    const top = parseFloat(noBtn.style.top) || 0;
-    const maxX = window.innerWidth - noBtn.offsetWidth - 10;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 10;
+  /* Floating hearts animation */
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = '💖';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (10 + Math.random()*30) + 'px';
+    document.body.appendChild(heart);
 
-    if (left > maxX) noBtn.style.left = maxX + "px";
-    if (top > maxY) noBtn.style.top = maxY + "px";
-  });
+    setTimeout(() => {
+      heart.remove();
+    }, 5000); // remove after animation
+  }
+
+  setInterval(createHeart, 300); // spawn hearts
 </script>
 
 </body>
