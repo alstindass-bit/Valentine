@@ -80,6 +80,7 @@
     animation: beat 1s infinite;
     user-select: none;
     opacity: 0.8;
+    pointer-events: none;
   }
 
   @keyframes beat {
@@ -87,8 +88,14 @@
     50%{ transform: scale(1.5); }
   }
 
-  iframe {
-    display: none;
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px #ff4d6d; }
+    50% { transform: scale(1.2); box-shadow: 0 0 20px #ff4d6d; }
+    100% { transform: scale(1); box-shadow: 0 0 10px #ff4d6d; }
+  }
+
+  .pulse {
+    animation: pulse 1s infinite;
   }
 
   @media (max-width: 500px) {
@@ -106,12 +113,51 @@
   <button id="no">No</button>
 </div>
 
-<iframe id="yt-player" 
-        src="https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=1" 
-        allow="autoplay">
-</iframe>
+<!-- YouTube player container -->
+<div id="player"></div>
 
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
+let player;
+
+// YouTube IFrame API
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    videoId: 'qdDVtFvJwUc',
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      start: 47,
+      end: 79,
+      loop: 1,
+      playlist: 'qdDVtFvJwUc',
+      mute: 1,
+      modestbranding: 1
+    },
+    events: {
+      'onReady': (event) => {
+        event.target.playVideo();
+        // Segment loop
+        setInterval(() => {
+          if(player.getCurrentTime() >= 79){
+            player.seekTo(47);
+          }
+        }, 500);
+      }
+    }
+  });
+}
+
+// Unmute on first tap for mobile
+document.addEventListener('click', () => {
+  if(player && player.isMuted()){
+    player.unMute();
+  }
+}, { once: true });
+
+// Buttons
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 
@@ -119,7 +165,7 @@ yesBtn.addEventListener("click", () => {
   alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
 });
 
-// Messages
+// Messages for No button
 const messages = [
   "💘 Nope… not happening!",
   "💕 Still no! You can’t escape me!",
@@ -128,7 +174,7 @@ const messages = [
   "❤️ One more click… and I’m gone! 😱"
 ];
 
-// No button shrinking variables
+// No button shrinking
 let clickCount = 0;
 const maxClicks = 5;
 let currentWidth = noBtn.offsetWidth;
@@ -153,7 +199,13 @@ function showToast(message, targetBtn){
   setTimeout(() => {
     toast.style.opacity = 0;
     toast.style.transform = 'translateY(-20px)';
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => {
+      toast.remove();
+      if(clickCount === maxClicks) {
+        noBtn.style.display = 'none';
+        yesBtn.classList.add('pulse'); // Start pulsing Yes
+      }
+    }, 300);
   }, 2000);
 }
 
@@ -161,12 +213,11 @@ function shrinkNoButton(){
   if(clickCount >= maxClicks) return;
 
   clickCount++;
-
-  // Shrink width, height, font-size proportionally
   const shrinkFactor = 0.85;
-  currentWidth = currentWidth * shrinkFactor;
-  currentHeight = currentHeight * shrinkFactor;
-  currentFont = currentFont * shrinkFactor;
+
+  currentWidth *= shrinkFactor;
+  currentHeight *= shrinkFactor;
+  currentFont *= shrinkFactor;
 
   noBtn.style.width = currentWidth + 'px';
   noBtn.style.height = currentHeight + 'px';
@@ -174,10 +225,6 @@ function shrinkNoButton(){
   noBtn.style.padding = (15 * Math.pow(shrinkFactor, clickCount)) + 'px ' + (30 * Math.pow(shrinkFactor, clickCount)) + 'px';
 
   showToast(messages[clickCount-1], noBtn);
-
-  if(clickCount === maxClicks){
-    setTimeout(() => noBtn.style.display = 'none', 400);
-  }
 }
 
 noBtn.addEventListener('click', shrinkNoButton);
@@ -192,18 +239,19 @@ function createHeart(){
   heart.style.top = Math.random() * window.innerHeight + 'px';
   heart.style.fontSize = (10 + Math.random()*30) + 'px';
   document.body.appendChild(heart);
+
+  // If hovering over Yes, hearts grow
+  if(yesBtn.matches(':hover')) heart.style.transform = 'scale(2)';
+
   setTimeout(() => heart.remove(), 1000);
 }
 setInterval(createHeart, 200);
 
-// YouTube unmute on first tap (mobile autoplay workaround)
-function unmuteYT(){
-  const player = document.getElementById('yt-player');
-  player.src = "https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0";
-  document.removeEventListener('click', unmuteYT);
-}
-document.addEventListener('click', unmuteYT);
-
+// Optional: more hearts when Yes is clicked
+yesBtn.addEventListener('mouseenter', () => {
+  for(let i=0;i<10;i++) setTimeout(createHeart, i*100);
+});
 </script>
+
 </body>
 </html>
