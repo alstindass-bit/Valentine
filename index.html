@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
-  /* Gradient Background */
   body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -29,12 +28,11 @@
 
   #button-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
     position: relative;
-    width: 100%;
-    max-width: 400px;
   }
 
   button {
@@ -61,16 +59,26 @@
   #no {
     background-color: #6c757d;
     color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    touch-action: none;
     width: 120px;
     height: 50px;
     font-size: 1.2rem;
     transition: width 0.2s, height 0.2s, font-size 0.2s;
     border-radius: 12px;
+  }
+
+  /* Toast messages */
+  .toast {
+    position: absolute;
+    background-color: rgba(255,255,255,0.9);
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
   /* Beating hearts */
@@ -108,78 +116,102 @@
 </iframe>
 
 <script>
-  const yesBtn = document.getElementById("yes");
-  const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
 
-  yesBtn.addEventListener("click", () => {
-    alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
-  });
+yesBtn.addEventListener("click", () => {
+  alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
+});
 
-  // Shrinking No button with disappearance after 5 clicks
-  let shrinkFactor = 0.9;
-  let minSize = 30;
-  let clickCount = 0;
-  let maxClicks = 5;
+// Shrinking No button with disappearance after 5 clicks
+let shrinkFactor = 0.9;
+let minSize = 30;
+let clickCount = 0;
+let maxClicks = 5;
 
-  function shrinkNoButton() {
-    clickCount++;
+const messages = [
+  "💘 Nope… not happening!",                  // 1st click
+  "💕 Still no! You can’t escape me!",       // 2nd click
+  "💖 Are you trying? Cute, but NO!",        // 3rd click
+  "💞 Haha! Giving up is not an option! 💖", // 4th click
+  "❤️ One more click… and I’m gone! 😱"      // 5th click
+];
 
-    if (clickCount >= maxClicks) {
-      noBtn.style.display = 'none';
-      return;
-    }
+// Function to show toast
+function showToast(message, targetBtn) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerText = message;
+  
+  // Position toast to the right of the button
+  const rect = targetBtn.getBoundingClientRect();
+  toast.style.left = rect.right + 10 + 'px';
+  toast.style.top = rect.top + 'px';
+  document.body.appendChild(toast);
 
-    const currentWidth = noBtn.offsetWidth;
-    const currentHeight = noBtn.offsetHeight;
+  // Animate in
+  setTimeout(() => {
+    toast.style.opacity = 1;
+    toast.style.transform = 'translateY(-10px)';
+  }, 10);
 
-    const newWidth = Math.max(currentWidth * shrinkFactor, minSize);
-    const newHeight = Math.max(currentHeight * shrinkFactor, minSize);
+  // Remove after 2s
+  setTimeout(() => {
+    toast.style.opacity = 0;
+    toast.style.transform = 'translateY(-20px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
 
-    noBtn.style.width = newWidth + "px";
-    noBtn.style.height = newHeight + "px";
-    noBtn.style.fontSize = (newHeight * 0.5) + "px";
+function shrinkNoButton() {
+  clickCount++;
 
-    const messages = [
-      "Whoa! It's shrinking! 😱",
-      "Keep trying! 💔",
-      "Almost there… 😏",
-      "Getting tiny, just like my hope 😅",
-      "This button is scared of you! 🫣"
-    ];
-
-    alert(messages[Math.floor(Math.random() * messages.length)]);
+  if (clickCount >= maxClicks) {
+    noBtn.style.display = 'none';
+    showToast("No button disappeared! ✅", yesBtn);
+    return;
   }
 
-  noBtn.addEventListener("click", shrinkNoButton);
-  noBtn.addEventListener("touchstart", shrinkNoButton);
+  const currentWidth = noBtn.offsetWidth;
+  const currentHeight = noBtn.offsetHeight;
 
-  // Beating hearts animation
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.innerHTML = '💖';
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.top = Math.random() * window.innerHeight + 'px';
-    heart.style.fontSize = (10 + Math.random() * 30) + 'px';
-    document.body.appendChild(heart);
+  const newWidth = Math.max(currentWidth * shrinkFactor, minSize);
+  const newHeight = Math.max(currentHeight * shrinkFactor, minSize);
 
-    setTimeout(() => {
-      heart.remove();
-    }, 1000); // matches beat animation
-  }
+  noBtn.style.width = newWidth + "px";
+  noBtn.style.height = newHeight + "px";
+  noBtn.style.fontSize = (newHeight * 0.5) + "px";
 
-  setInterval(createHeart, 200);
+  showToast(messages[clickCount - 1], noBtn);
+}
 
-  // Unmute YouTube after first click (bypass browser autoplay restriction)
-  function unmuteYT() {
-    const player = document.getElementById('yt-player');
-    player.src = "https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0";
-    document.removeEventListener('click', unmuteYT);
-  }
+noBtn.addEventListener("click", shrinkNoButton);
+noBtn.addEventListener("touchstart", shrinkNoButton);
 
-  document.addEventListener('click', unmuteYT);
+// Beating hearts animation
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.innerHTML = '💖';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.top = Math.random() * window.innerHeight + 'px';
+  heart.style.fontSize = (10 + Math.random() * 30) + 'px';
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 1000);
+}
+setInterval(createHeart, 200);
+
+// Unmute YouTube after first click (bypass autoplay restriction)
+function unmuteYT() {
+  const player = document.getElementById('yt-player');
+  player.src = "https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0";
+  document.removeEventListener('click', unmuteYT);
+}
+document.addEventListener('click', unmuteYT);
 
 </script>
-
 </body>
 </html>
