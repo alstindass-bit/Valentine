@@ -73,18 +73,19 @@
     border-radius: 12px;
   }
 
-  /* Floating hearts */
+  /* Beating hearts */
   .heart {
     position: absolute;
     color: #fff;
     font-size: 20px;
-    animation: float 5s linear infinite;
+    animation: beat 1s infinite;
     user-select: none;
+    opacity: 0.8;
   }
 
-  @keyframes float {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
   }
 
   iframe {
@@ -98,10 +99,13 @@
 
 <div id="button-container">
   <button id="yes">Yes 💖</button>
-  <button id="no">No 😏</button>
+  <button id="no">No</button>
 </div>
 
-<iframe id="yt-player" src="https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0" allow="autoplay"></iframe>
+<iframe id="yt-player" 
+        src="https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=1" 
+        allow="autoplay">
+</iframe>
 
 <script>
   const yesBtn = document.getElementById("yes");
@@ -111,10 +115,20 @@
     alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
   });
 
+  // Shrinking No button with disappearance after 5 clicks
   let shrinkFactor = 0.9;
   let minSize = 30;
+  let clickCount = 0;
+  let maxClicks = 5;
 
   function shrinkNoButton() {
+    clickCount++;
+
+    if (clickCount >= maxClicks) {
+      noBtn.style.display = 'none';
+      return;
+    }
+
     const currentWidth = noBtn.offsetWidth;
     const currentHeight = noBtn.offsetHeight;
 
@@ -123,7 +137,7 @@
 
     noBtn.style.width = newWidth + "px";
     noBtn.style.height = newHeight + "px";
-    noBtn.style.fontSize = (newHeight * 0.4) + "px";
+    noBtn.style.fontSize = (newHeight * 0.5) + "px";
 
     const messages = [
       "Whoa! It's shrinking! 😱",
@@ -139,21 +153,32 @@
   noBtn.addEventListener("click", shrinkNoButton);
   noBtn.addEventListener("touchstart", shrinkNoButton);
 
-  /* Floating hearts animation */
+  // Beating hearts animation
   function createHeart() {
     const heart = document.createElement('div');
     heart.classList.add('heart');
     heart.innerHTML = '💖';
     heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.fontSize = (10 + Math.random()*30) + 'px';
+    heart.style.top = Math.random() * window.innerHeight + 'px';
+    heart.style.fontSize = (10 + Math.random() * 30) + 'px';
     document.body.appendChild(heart);
 
     setTimeout(() => {
       heart.remove();
-    }, 5000); // remove after animation
+    }, 1000); // matches beat animation
   }
 
-  setInterval(createHeart, 300); // spawn hearts
+  setInterval(createHeart, 200);
+
+  // Unmute YouTube after first click (bypass browser autoplay restriction)
+  function unmuteYT() {
+    const player = document.getElementById('yt-player');
+    player.src = "https://www.youtube.com/embed/qdDVtFvJwUc?start=47&end=79&autoplay=1&loop=1&playlist=qdDVtFvJwUc&mute=0";
+    document.removeEventListener('click', unmuteYT);
+  }
+
+  document.addEventListener('click', unmuteYT);
+
 </script>
 
 </body>
