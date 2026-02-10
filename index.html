@@ -1,67 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>For Stuti 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Stuti 💖</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
- <style>
- body {
-   font-family: Arial, sans-serif;
-   text-align: center;
-   background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
-   height: 100vh;
-   margin: 0;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   overflow: hidden;
- }
+  h1 {
+    color: #b3003b;
+    padding: 0 15px;
+    font-size: 2.5rem;
+    z-index: 1;
+  }
 
- h1 {
-   color: #b3003b;
-   padding: 0 15px;
-   font-size: 2.5rem;
- }
+  button {
+    font-size: 1.2rem;
+    padding: 14px 28px;
+    margin: 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+  }
 
- button {
-   font-size: 1.2rem;
-   padding: 14px 28px;
-   margin: 15px;
-   border: none;
-   border-radius: 12px;
-   cursor: pointer;
- }
+  #yes {
+    background-color: #ff4d6d;
+    color: white;
+  }
 
- #yes {
-   background-color: #ff4d6d;
-   color: white;
- }
+  #no {
+    background-color: #6c757d;
+    color: white;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+  }
 
- #no {
-   background-color: #6c757d;
-   color: white;
-   position: absolute;
-   top: 65%;
-   left: 55%;
- }
-
- iframe {
-   display: none;
- }
- </style>
+  iframe {
+    display: none; /* hide music player */
+  }
+</style>
 </head>
-
 <body>
 
- <h1>Stuti, will you be my Valentine? 💘</h1>
+<h1>Stuti, will you be my Valentine? 💘</h1>
+<button id="yes">Yes 💖</button>
+<button id="no">No 😏</button>
 
- <button id="yes" onclick="yesClicked()">Yes 💖</button>
- <button id="no" onclick="noClicked()">No 😏</button>
+<!-- Background music muted to allow autoplay -->
+<iframe src="https://www.youtube.com/embed/0FIsCGRCKj8?autoplay=1&mute=1&loop=1&playlist=0FIsCGRCKj8" allow="autoplay"></iframe>
 
- <!-- Background music (muted so autoplay works in browsers) -->
- <iframe
-   src="https://www.youtube.com/embed/0FIsCGRCKj8?autoplay=1&mute=1&loop=1&playlist=0FIsCGRCKj8"
-   allow="autoplay">
- </ifram
+<script>
+  const yesBtn = document.getElementById("yes");
+  const noBtn = document.getElementById("no");
+
+  yesBtn.addEventListener("click", () => {
+    alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
+  });
+
+  noBtn.addEventListener("click", () => {
+    // Move button to a random position inside the viewport
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    // Random playful message
+    const messages = [
+      "Whoa! Not even an 'almost'? 😭",
+      "Stuti!! That’s cruel 💔",
+      "You can’t escape fate 😌",
+      "Nooo! My heart!",
+      "This is getting dra
