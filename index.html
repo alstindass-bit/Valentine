@@ -15,7 +15,7 @@
     background: linear-gradient(135deg, #ffb6c1, #ff4d6d);
   }
 
-  /* Landing Page */
+  /* LANDING PAGE */
   #landing {
     display: flex;
     flex-direction: column;
@@ -23,15 +23,17 @@
     align-items: center;
     height: 100vh;
   }
+
   #landing h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
     color: #fff;
     margin-bottom: 20px;
     text-shadow: 1px 1px 5px #800000;
   }
+
   #playBtn {
     font-size: 1.5rem;
-    padding: 15px 40px;
+    padding: 12px 30px; /* Reduced size */
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -39,7 +41,7 @@
     color: white;
   }
 
-  /* Main Content */
+  /* MAIN CONTENT */
   #mainContent {
     display: none;
     flex-direction: column;
@@ -48,6 +50,7 @@
     min-height: 100vh;
     position: relative;
   }
+
   h1 {
     color: #fff;
     font-size: 2.2rem;
@@ -68,22 +71,26 @@
 
   button {
     font-size: 1.2rem;
-    padding: 14px 28px;
+    padding: 12px 28px; /* adjusted for visual balance */
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s, width 0.2s, height 0.2s;
     flex: 1;
+    transition: transform 0.2s, width 0.2s, height 0.2s, font-size 0.2s;
     z-index: 2;
+    min-width: 120px; /* prevent extreme shrinking */
   }
-  button:hover { transform: scale(1.1); }
+
+  button:hover {
+    transform: scale(1.05);
+  }
 
   #yes { background-color: #ff4d6d; color: white; }
   #no { background-color: #6c757d; color: white; touch-action: none; }
 
   #toast {
     position: absolute;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     padding: 10px 20px;
     border-radius: 12px;
     color: #333;
@@ -94,10 +101,11 @@
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
-    margin-top: 10px;
+    margin-top: 12px;
+    white-space: nowrap;
   }
 
-  /* Beating Hearts */
+  /* BEATING HEARTS */
   .heart {
     position: absolute;
     width: 20px;
@@ -106,6 +114,7 @@
     transform: rotate(-45deg);
     animation: beat 1s infinite;
   }
+
   .heart::before,
   .heart::after {
     content: "";
@@ -117,6 +126,7 @@
   }
   .heart::before { top: -10px; left: 0; }
   .heart::after { left: 10px; top: 0; }
+
   @keyframes beat {
     0%,100% { transform: scale(1) rotate(-45deg); }
     50% { transform: scale(1.3) rotate(-45deg); }
@@ -129,13 +139,13 @@
 </head>
 <body>
 
-<!-- Landing Page -->
+<!-- LANDING PAGE -->
 <div id="landing">
   <h1>Press Play to Start 💖</h1>
   <button id="playBtn">Play 💖</button>
 </div>
 
-<!-- Main Content -->
+<!-- MAIN CONTENT -->
 <div id="mainContent">
   <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
@@ -145,7 +155,7 @@
   </div>
 </div>
 
-<!-- Audio -->
+<!-- AUDIO -->
 <audio id="song" src="Justin%20Bieber%20-%20Love%20Me.mp3" preload="auto"></audio>
 
 <script>
@@ -167,15 +177,17 @@ const messages = [
   "One more click and I disappear! 💔"
 ];
 
-// --- PLAY BUTTON FLOW ---
+// --- PLAY BUTTON ---
 playBtn.addEventListener("click", async () => {
   try {
     song.volume = 0.4;
-    song.currentTime = 46; // start at 46s
+    song.currentTime = 45; // start 1s earlier
     await song.play();
+
+    // loop between 45s and 79s
     song.addEventListener("timeupdate", () => {
-      if(song.currentTime >= 79){ // end at 1:19 = 79s
-        song.currentTime = 46;
+      if(song.currentTime >= 79){
+        song.currentTime = 45;
         song.play();
       }
     });
@@ -183,7 +195,7 @@ playBtn.addEventListener("click", async () => {
     landing.style.display = "none";
     mainContent.style.display = "flex";
 
-    // spawn hearts in background
+    // spawn hearts
     setInterval(() => {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -215,8 +227,8 @@ noBtn.addEventListener("click", () => {
   if(noClicks < maxNoClicks - 1){
     toast.innerText = messages[noClicks];
     toast.style.opacity = 1;
-    noBtn.style.width = noBtn.offsetWidth * 0.8 + "px";
-    noBtn.style.height = noBtn.offsetHeight * 0.8 + "px";
+    // scale button proportionally
+    noBtn.style.transform = `scale(${1 - 0.1*(noClicks+1)})`;
     noClicks++;
   } else {
     toast.innerText = messages[noClicks];
@@ -225,7 +237,12 @@ noBtn.addEventListener("click", () => {
   }
   setTimeout(() => toast.style.opacity = 0, 1200);
 });
-</script>
 
+// --- Responsive No Button ---
+window.addEventListener("resize", () => {
+  const maxX = window.innerWidth - noBtn.offsetWidth - 10;
+  const maxY = window.innerHeight - noBtn.offsetHeight - 10;
+});
+</script>
 </body>
 </html>
