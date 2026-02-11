@@ -27,6 +27,8 @@
   #landing h1 {
     font-size: 2rem;
     margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 4px #ff4d6d;
   }
   #playBtn {
     padding: 15px 30px;
@@ -36,7 +38,9 @@
     background-color: #ff4d6d;
     color: white;
     border: none;
+    transition: transform 0.2s;
   }
+  #playBtn:hover { transform: scale(1.05); }
 
   /* MAIN CONTENT */
   #mainContent {
@@ -47,6 +51,7 @@
     min-height: 100vh;
     background: linear-gradient(135deg, #ffe6f0, #ffccd5);
     position: relative;
+    overflow: hidden;
   }
 
   h1 {
@@ -75,28 +80,17 @@
     cursor: pointer;
     transition: transform 0.2s, width 0.2s, height 0.2s;
     z-index: 2;
-  }
-  button:hover {
-    transform: scale(1.05);
-  }
-
-  #yes {
-    background-color: #ff4d6d;
-    color: white;
     flex: 1;
   }
+  button:hover { transform: scale(1.05); }
 
-  #no {
-    background-color: #6c757d;
-    color: white;
-    flex: 1;
-    touch-action: none;
-  }
+  #yes { background-color: #ff4d6d; color: white; }
+  #no { background-color: #6c757d; color: white; touch-action: none; }
 
   /* TOAST MESSAGES */
   #toast {
     position: absolute;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     padding: 10px 20px;
     border-radius: 12px;
     color: #333;
@@ -168,7 +162,7 @@
 </div>
 
 <!-- AUDIO -->
-<audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
+<audio id="song" src="Justin%20Bieber%20-%20Love%20Me.mp3" preload="auto"></audio>
 
 <script>
 const landing = document.getElementById("landing");
@@ -232,16 +226,19 @@ Happy Valentine’s, Stuti. 💕`);
 
 // --- NO BUTTON ---
 noBtn.addEventListener("click", () => {
-  if (noClicks < maxNoClicks) {
+  if (noClicks < maxNoClicks - 1) {
     toast.innerText = messages[noClicks];
     toast.style.opacity = 1;
     noBtn.style.width = noBtn.offsetWidth * 0.8 + "px";
     noBtn.style.height = noBtn.offsetHeight * 0.8 + "px";
     noClicks++;
   } else {
-    toast.innerText = messages[noClicks - 1];
+    // last message
+    toast.innerText = messages[noClicks];
     toast.style.opacity = 1;
-    noBtn.style.display = "none";
+    setTimeout(() => {
+      noBtn.style.display = "none";
+    }, 1200);
   }
   // hide toast after 1.2s
   setTimeout(() => toast.style.opacity = 0, 1200);
