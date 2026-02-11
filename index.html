@@ -3,110 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You 💖</title>
-
+<title>For Stuti 💖</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
+/* --- Body & Fonts --- */
+body, html {
   margin: 0;
   padding: 0;
-  text-align: center;
+  font-family: Arial, sans-serif;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
+  text-align: center;
   overflow: hidden;
   position: relative;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
+/* --- Heading --- */
 h1 {
   color: #fff;
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 2.2rem;
+  margin: 20px;
+  text-shadow: 1px 1px 5px #ff4d6d;
 }
 
-#button-container {
-  display: flex;
-  gap: 20px;
-  position: relative;
-}
-
-button {
-  width: 180px;
-  font-size: 1.2rem;
-  padding: 14px 0;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-#yes {
-  background-color: #ff4d6d;
-  color: white;
-}
-
-#no {
-  background-color: #6c757d;
-  color: white;
-  position: relative;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-/* Toast */
-.toast {
-  position: absolute;
-  background: rgba(255,255,255,0.95);
-  color: #000;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  margin-top: 8px;
-  z-index: 10;
-  pointer-events: none;
-  animation: fadeIn 0.2s ease-in;
-}
-
-@keyframes fadeIn {
-  from {opacity:0; transform: translateX(-50%) translateY(-5px);}
-  to {opacity:1; transform: translateX(-50%) translateY(0);}
-}
-
-/* Mobile */
-@media (max-width: 500px) {
-  #button-container {
-    flex-direction: column;
-  }
-  button {
-    width: 160px;
-  }
-}
-
-/* Hearts */
-.heart {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
-  background-size: contain;
-  animation: beat 1s infinite;
-  opacity: 0.7;
-}
-
-@keyframes beat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.4); }
-}
-
-/* Landing */
+/* --- Landing Page --- */
 #landing {
   position: absolute;
   top:0; left:0; right:0; bottom:0;
@@ -114,183 +33,253 @@ button:hover {
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
   z-index: 20;
   color:white;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
 #landing button {
-  width:200px;
-  padding:15px 0;
+  width:180px;
+  padding:12px 0;
   font-size:1.3rem;
   border:none;
   border-radius:12px;
   background:#ff4d6d;
   color:white;
   cursor:pointer;
+  transition: transform 0.2s;
 }
 
-/* Modal */
-#modal {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.5);
+#landing button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Main Content --- */
+#mainContent {
   display:none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* --- Buttons --- */
+#button-container {
+  display:flex;
   justify-content:center;
-  align-items:center;
-  z-index: 30;
+  gap:20px;
+  margin-top:30px;
+  position: relative;
 }
 
-#modalContent {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  max-width: 350px;
-  text-align: center;
-  animation: pop 0.3s ease-out;
+button {
+  width:160px;
+  font-size:1.2rem;
+  padding:12px 0;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  transition: transform 0.2s, width 0.2s, height 0.2s;
+  position: relative;
+  overflow: visible;
 }
 
-@keyframes pop {
-  from {transform: scale(0.8); opacity:0;}
-  to {transform: scale(1); opacity:1;}
+#yes {
+  background-color:#ff4d6d;
+  color:white;
 }
 
-#closeModal {
-  margin-top: 15px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
+#no {
+  background-color:#6c757d;
+  color:white;
+  position:relative;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Toast --- */
+.toast {
+  position:absolute;
+  background: rgba(255,255,255,0.95);
+  color:#333;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:0.95rem;
+  top:100%;
+  left:50%;
+  transform: translateX(-50%) scale(0.8);
+  white-space: nowrap;
+  margin-top:8px;
+  pointer-events:none;
+  opacity:0;
+  transition: transform 0.2s, opacity 0.3s;
+}
+
+/* --- Sparkle --- */
+.sparkle {
+  position:absolute;
+  width:10px;
+  height:10px;
+  background: gold;
+  border-radius:50%;
+  box-shadow: 0 0 8px gold, 0 0 12px yellow;
+  animation: sparkle 0.6s forwards;
+  pointer-events:none;
+}
+@keyframes sparkle {
+  0% { transform: scale(0.2); opacity:1; }
+  50% { transform: scale(1.2); opacity:1; }
+  100% { transform: scale(0); opacity:0; }
+}
+
+/* --- Beating Hearts --- */
+.heart {
+  position:absolute;
+  width:20px;
+  height:20px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+  background-size: contain;
+  animation: beat 1s infinite;
+  opacity:0.7;
+}
+
+@keyframes beat {
+  0%,100% {transform: scale(1);}
+  50% {transform: scale(1.4);}
+}
+
+/* --- Mobile --- */
+@media (max-width:600px){
+  #button-container { flex-direction: column; }
+  button { width:140px; }
+  .toast { top:auto; bottom:-40px; transform: translateX(-50%) scale(0.8);}
 }
 </style>
 </head>
-
 <body>
 
+<!-- Landing Page -->
 <div id="landing">
   <h1>Press Play to Continue 💖</h1>
   <button id="playBtn">Play 🎵</button>
 </div>
 
-<div id="mainContent" style="display:none; flex-direction:column; align-items:center;">
-  <h1>Will you be my Valentine? 💘</h1>
+<!-- Main Content -->
+<div id="mainContent">
+  <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
     <button id="yes">Yes 💖</button>
-    <button id="no">No</button>
+    <button id="no">No 😏</button>
   </div>
 </div>
 
-<div id="modal">
-  <div id="modalContent">
-    <div id="modalText"></div>
-    <button id="closeModal">Close 💕</button>
-  </div>
-</div>
-
+<!-- Audio -->
 <audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
 
 <script>
-const landing = document.getElementById('landing');
-const mainContent = document.getElementById('mainContent');
-const playBtn = document.getElementById('playBtn');
-const song = document.getElementById('song');
+const landing = document.getElementById("landing");
+const mainContent = document.getElementById("mainContent");
+const playBtn = document.getElementById("playBtn");
+const song = document.getElementById("song");
 
-playBtn.addEventListener('click', () => {
-  landing.style.display = 'none';
-  mainContent.style.display = 'flex';
-
-  song.currentTime = 48;
-  song.volume = 0.4;
-  song.play();
-
-  let fading = false;
-
-  song.addEventListener('timeupdate', () => {
-    if (!fading && song.currentTime >= 78.5) {
-      fading = true;
-
-      let fadeOut = setInterval(() => {
-        if (song.volume > 0.05) {
-          song.volume -= 0.05;
-        } else {
-          clearInterval(fadeOut);
-
-          song.currentTime = 48;
-
-          let fadeIn = setInterval(() => {
-            if (song.volume < 0.4) {
-              song.volume += 0.05;
-            } else {
-              song.volume = 0.4;
-              clearInterval(fadeIn);
-              fading = false;
-            }
-          }, 40);
-        }
-      }, 40);
-    }
-  });
-});
-
-/* Hearts */
-setInterval(() => {
-  const heart = document.createElement('div');
-  heart.className = 'heart';
-  heart.style.left = Math.random() * window.innerWidth + 'px';
-  heart.style.top = Math.random() * window.innerHeight + 'px';
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 4000);
-}, 400);
-
-/* Modal */
-const modal = document.getElementById('modal');
-const modalText = document.getElementById('modalText');
-const closeModal = document.getElementById('closeModal');
-
-document.getElementById('yes').addEventListener('click', () => {
-  modalText.innerHTML = `
-  <p>Look at that… 💖</p>
-  <p><strong>Miss “You’re not romantic enough”</strong> just chose me. 😌</p>
-  <p>Lucky for you, I actually love trying to impress you.</p>
-  <p><strong>Happy Valentine’s. 💕</strong></p>
-  `;
-  modal.style.display = 'flex';
-});
-
-closeModal.addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-
-/* No Button */
+const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
+
+let noClicks = 0;
 const messages = [
-  "Not happening. 😌",
-  "Still not an option.",
-  "Nice try.",
-  "One more click and I disappear."
+  "Hmm… I don’t think so. 😌",
+  "Still not an option. 💕",
+  "You’re clicking the wrong one. 😏",
+  "This is it… No’s officially off the table 😏✨"
 ];
 
-let clickCount = 0;
+// --- Landing Play ---
+playBtn.addEventListener("click", async () => {
+  landing.style.display="none";
+  mainContent.style.display="flex";
+  mainContent.style.flexDirection="column";
+  mainContent.style.alignItems="center";
+  mainContent.style.justifyContent="center";
+  
+  song.currentTime = 48;
+  await song.play();
+  song.volume = 0.4;
 
+  // Smooth loop
+  song.addEventListener("timeupdate", () => {
+    if(song.currentTime >= 79) song.currentTime = 48;
+  });
+
+  // Beating Hearts
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className="heart";
+    heart.style.left=Math.random()*window.innerWidth+"px";
+    heart.style.top=Math.random()*window.innerHeight+"px";
+    heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+  },400);
+});
+
+// --- Yes Button ---
+yesBtn.addEventListener("click", () => {
+  // Sparkles
+  for(let i=0;i<8;i++){
+    const sparkle = document.createElement("div");
+    sparkle.className="sparkle";
+    sparkle.style.left=(yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
+    sparkle.style.top=(yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
+    document.body.appendChild(sparkle);
+    setTimeout(()=>sparkle.remove(),600);
+  }
+
+  alert(
+`Look at that… 💖
+
+Miss “He’s not romantic enough” 
+just chose me. 😏
+
+Lucky for you, I actually love trying to impress you.  
+
+Happy Valentine’s! 💕`
+  );
+});
+
+// --- No Button ---
 noBtn.addEventListener("click", () => {
-  if(clickCount < messages.length) {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = messages[clickCount];
+  // Vibration hint
+  if(navigator.vibrate) navigator.vibrate(150);
+
+  if(noClicks < messages.length){
+    // Show toast
+    const toast = document.createElement("div");
+    toast.className="toast";
+    toast.textContent=messages[noClicks];
     noBtn.appendChild(toast);
+    
+    // Pop effect for toast
+    setTimeout(()=>toast.style.opacity=1,10);
+    toast.style.transform="translateX(-50%) scale(1.1)";
+    setTimeout(()=>toast.style.transform="translateX(-50%) scale(1)",100);
 
-    setTimeout(() => toast.remove(), 2000);
+    setTimeout(()=>toast.style.opacity=0,2000);
 
-    clickCount++;
+    // Shrink button slightly
+    let scale = 1 - 0.1*(noClicks+1);
+    noBtn.style.transform = `scale(${scale})`;
 
-    if(clickCount === messages.length) {
-      setTimeout(() => noBtn.remove(), 2000);
+    noClicks++;
+    
+    // Remove button after last toast
+    if(noClicks === messages.length){
+      setTimeout(()=>noBtn.remove(),2200);
     }
   }
 });
 </script>
-
 </body>
 </html>
