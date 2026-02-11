@@ -159,47 +159,13 @@ button:hover {
   </div>
 </div>
 
-<!-- YouTube Player -->
-<div id="player"></div>
+<!-- Audio -->
+<audio id="song" loop>
+  <source src="song_clip.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-let player;
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    height: '0',
-    width: '0',
-    videoId: 'qdDVtFvJwUc',
-    playerVars: {
-      autoplay: 0,
-      controls: 0,
-      start: 47,
-      modestbranding: 1
-    }
-  });
-}
-
-// Landing Play Button
-const playBtn = document.getElementById('playBtn');
-const landing = document.getElementById('landing');
-const mainContent = document.getElementById('mainContent');
-
-playBtn.addEventListener('click', () => {
-  landing.style.display = 'none';
-  mainContent.style.display = 'flex';
-  mainContent.style.flexDirection = 'column';
-  mainContent.style.alignItems = 'center';
-  mainContent.style.justifyContent = 'center';
-  
-  // Play the song after user action
-  player.playVideo();
-
-  // Loop 47s → 79s
-  setInterval(() => {
-    if(player.getCurrentTime() >= 79) player.seekTo(47);
-  }, 300);
-});
-
 // Beating Hearts
 const createHeart = () => {
   const heart = document.createElement('div');
@@ -211,6 +177,24 @@ const createHeart = () => {
   setTimeout(() => heart.remove(), 4000);
 };
 setInterval(createHeart, 400);
+
+// Landing Play Button
+const playBtn = document.getElementById('playBtn');
+const landing = document.getElementById('landing');
+const mainContent = document.getElementById('mainContent');
+const song = document.getElementById('song');
+
+playBtn.addEventListener('click', () => {
+  landing.style.display = 'none';
+  mainContent.style.display = 'flex';
+  mainContent.style.flexDirection = 'column';
+  mainContent.style.alignItems = 'center';
+  mainContent.style.justifyContent = 'center';
+
+  // Play the song
+  song.currentTime = 0; // start at beginning of clip
+  song.play();
+});
 
 // Buttons
 const yesBtn = document.getElementById("yes");
