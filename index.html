@@ -4,227 +4,258 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
-
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff9a9e, #ff6a88, #ff4d6d);
-  overflow: hidden;
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-/* Landing Screen */
-#landing {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: inherit;
-  z-index: 10;
-}
-
-#landing button {
-  padding: 15px 30px;
-  font-size: 1.3rem;
-  border: none;
-  border-radius: 12px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#landing button:hover {
-  transform: scale(1.05);
-}
-
-/* Main Content */
-#mainContent {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-}
-
-#button-container {
-  display: flex;
-  gap: 20px;
-}
-
-button.choice {
-  width: 180px;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#yes {
-  background: #ff4d6d;
-  color: white;
-}
-
-#no {
-  background: #6c757d;
-  color: white;
-  position: relative;
-}
-
-button.choice:hover {
-  transform: scale(1.05);
-}
-
-/* Toast */
-.toast {
-  position: absolute;
-  top: 110%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  color: black;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-/* Mobile */
-@media (max-width: 500px) {
-  #button-container {
-    flex-direction: column;
+  /* BODY & GENERAL */
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    text-align: center;
+    overflow: hidden;
   }
-}
 
-/* Hidden but playable YouTube player */
-#player {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0.01;
-  pointer-events: none;
-}
+  /* LANDING SCREEN */
+  #landing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffc1cc, #ffb6c1);
+  }
+  #landing h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  #playBtn {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: #ff4d6d;
+    color: white;
+    border: none;
+  }
+
+  /* MAIN CONTENT */
+  #mainContent {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6f0, #ffccd5);
+    position: relative;
+  }
+
+  h1 {
+    color: #fff;
+    font-size: 2.2rem;
+    margin: 20px;
+    text-shadow: 1px 1px 5px #ff4d6d;
+  }
+
+  #button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 30px;
+  }
+
+  button {
+    font-size: 1.2rem;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, width 0.2s, height 0.2s;
+    z-index: 2;
+  }
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  #yes {
+    background-color: #ff4d6d;
+    color: white;
+    flex: 1;
+  }
+
+  #no {
+    background-color: #6c757d;
+    color: white;
+    flex: 1;
+    touch-action: none;
+  }
+
+  /* TOAST MESSAGES */
+  #toast {
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    padding: 10px 20px;
+    border-radius: 12px;
+    color: #333;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    margin-top: 10px;
+  }
+
+  /* BEATING HEARTS */
+  .heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(-45deg);
+    animation: beat 1s infinite;
+  }
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+  }
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: 10px; top: 0; }
+
+  @keyframes beat {
+    0%, 100% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.3) rotate(-45deg); }
+  }
+
+  /* MOBILE STACKING */
+  @media (max-width: 600px) {
+    #button-container {
+      flex-direction: column;
+    }
+    #toast {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- Landing -->
+<!-- LANDING PAGE -->
 <div id="landing">
-  <h1>Press Play to Continue 💖</h1>
-  <button id="playBtn">Play 🎵</button>
+  <h1>Press Play to Start 💖</h1>
+  <button id="playBtn">Play 💖</button>
 </div>
 
-<!-- Main Question -->
+<!-- MAIN CONTENT -->
 <div id="mainContent">
   <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
-    <button id="yes" class="choice">Yes 💖</button>
-    <button id="no" class="choice">No</button>
+    <button id="yes">Yes 💖</button>
+    <button id="no">No</button>
+    <div id="toast"></div>
   </div>
 </div>
 
-<!-- YouTube Player -->
-<div id="player"></div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
+<!-- AUDIO -->
+<audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
 
 <script>
-let player;
-let loopInterval;
-
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    videoId: 'qdDVtFvJwUc',
-    playerVars: {
-      controls: 0,
-      modestbranding: 1,
-      rel: 0,
-      playsinline: 1
-    }
-  });
-}
-
-const playBtn = document.getElementById("playBtn");
 const landing = document.getElementById("landing");
 const mainContent = document.getElementById("mainContent");
+const playBtn = document.getElementById("playBtn");
+const song = document.getElementById("song");
 
-playBtn.addEventListener("click", () => {
-
-  // Show main content
-  landing.style.display = "none";
-  mainContent.style.display = "flex";
-
-  // Start music from 47 seconds
-  player.seekTo(47);
-  player.playVideo();
-
-  // Clean loop 47 → 79
-  loopInterval = setInterval(() => {
-    if (player.getCurrentTime() >= 79) {
-      player.seekTo(47);
-    }
-  }, 300);
-});
-
-/* YES BUTTON */
-document.getElementById("yes").addEventListener("click", () => {
-  alert(
-`Look at that… 💖
-
-Miss “He’s not romantic enough”
-just chose me. 😏
-
-Lucky for you, I actually love trying to impress you.
-
-Happy Valentine’s, Stuti! 💕`
-  );
-});
-
-/* NO BUTTON */
+const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
+const toast = document.getElementById("toast");
+
+let noClicks = 0;
+const maxNoClicks = 4;
 
 const messages = [
-  "Not happening! 😏",
-  "Seriously, try again! 😅",
-  "Haha, you can’t escape! 😌",
-  "One more click and I’m gone! 💔"
+  "Haha, you can't escape! 😌",
+  "Nope, not an option! 💖",
+  "Try again… destiny awaits! 😏",
+  "One more click and I disappear! 💔"
 ];
 
-let clickCount = 0;
+// --- PLAY BUTTON FLOW ---
+playBtn.addEventListener("click", async () => {
+  try {
+    await song.play();
+    song.volume = 0.4;
+    song.addEventListener("ended", () => {
+      song.currentTime = 0;
+      song.play();
+    });
 
-noBtn.addEventListener("click", () => {
-  if (clickCount >= messages.length) return;
+    landing.style.display = "none";
+    mainContent.style.display = "flex";
 
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.textContent = messages[clickCount];
-  noBtn.appendChild(toast);
+    // spawn hearts in background
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 2000);
+    }, 500);
 
-  setTimeout(() => toast.remove(), 2000);
-
-  // Shrink
-  const scale = 1 - 0.1 * (clickCount + 1);
-  noBtn.style.transform = `scale(${scale})`;
-
-  clickCount++;
-
-  // Remove only after LAST message displays
-  if (clickCount === messages.length) {
-    setTimeout(() => {
-      noBtn.remove();
-    }, 2200);
+  } catch(err) {
+    alert("Tap Play again 💖");
   }
 });
-</script>
 
+// --- YES BUTTON ---
+yesBtn.addEventListener("click", () => {
+  alert(`You always say I’m not romantic enough. 💖
+But if this doesn’t count,
+then I guess I’ll just have to try harder.
+
+Lucky for you,
+I kind of like the idea of impressing you.
+
+Happy Valentine’s, Stuti. 💕`);
+});
+
+// --- NO BUTTON ---
+noBtn.addEventListener("click", () => {
+  if (noClicks < maxNoClicks) {
+    toast.innerText = messages[noClicks];
+    toast.style.opacity = 1;
+    noBtn.style.width = noBtn.offsetWidth * 0.8 + "px";
+    noBtn.style.height = noBtn.offsetHeight * 0.8 + "px";
+    noClicks++;
+  } else {
+    toast.innerText = messages[noClicks - 1];
+    toast.style.opacity = 1;
+    noBtn.style.display = "none";
+  }
+  // hide toast after 1.2s
+  setTimeout(() => toast.style.opacity = 0, 1200);
+});
+
+// --- RESPONSIVE NO BUTTON ---
+window.addEventListener("resize", () => {
+  const maxX = window.innerWidth - noBtn.offsetWidth - 10;
+  const maxY = window.innerHeight - noBtn.offsetHeight - 10;
+  const left = parseFloat(noBtn.style.left) || 0;
+  const top = parseFloat(noBtn.style.top) || 0;
+  if (left > maxX) noBtn.style.left = maxX + "px";
+  if (top > maxY) noBtn.style.top = maxY + "px";
+});
+</script>
 </body>
 </html>
