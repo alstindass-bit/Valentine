@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Stuti 💖</title>
+<title>For You 💖</title>
+
 <style>
-/* --- Body & Fonts --- */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -20,23 +20,18 @@ body {
   position: relative;
 }
 
-/* --- Heading --- */
 h1 {
   color: #fff;
   font-size: 2rem;
   margin-bottom: 30px;
 }
 
-/* --- Button Container --- */
 #button-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 20px;
   position: relative;
 }
 
-/* --- Buttons --- */
 button {
   width: 180px;
   font-size: 1.2rem;
@@ -44,7 +39,7 @@ button {
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.2s, width 0.2s, height 0.2s;
+  transition: transform 0.2s;
 }
 
 #yes {
@@ -62,12 +57,12 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* --- Toast Message --- */
+/* Toast */
 .toast {
   position: absolute;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   color: #000;
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
   font-size: 0.95rem;
   top: 100%;
@@ -77,26 +72,25 @@ button:hover {
   margin-top: 8px;
   z-index: 10;
   pointer-events: none;
+  animation: fadeIn 0.2s ease-in;
 }
 
-/* --- Mobile Layout --- */
+@keyframes fadeIn {
+  from {opacity:0; transform: translateX(-50%) translateY(-5px);}
+  to {opacity:1; transform: translateX(-50%) translateY(0);}
+}
+
+/* Mobile */
 @media (max-width: 500px) {
   #button-container {
     flex-direction: column;
   }
-
   button {
     width: 160px;
   }
-
-  .toast {
-    top: auto;
-    bottom: -40px;
-    transform: translateX(-50%);
-  }
 }
 
-/* --- Beating Hearts --- */
+/* Hearts */
 .heart {
   position: absolute;
   width: 20px;
@@ -112,7 +106,7 @@ button:hover {
   50% { transform: scale(1.4); }
 }
 
-/* --- Landing Page --- */
+/* Landing */
 #landing {
   position: absolute;
   top:0; left:0; right:0; bottom:0;
@@ -134,121 +128,165 @@ button:hover {
   background:#ff4d6d;
   color:white;
   cursor:pointer;
-  transition: transform 0.2s;
 }
 
-#landing button:hover {
-  transform: scale(1.05);
+/* Modal */
+#modal {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index: 30;
+}
+
+#modalContent {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 350px;
+  text-align: center;
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  from {transform: scale(0.8); opacity:0;}
+  to {transform: scale(1); opacity:1;}
+}
+
+#closeModal {
+  margin-top: 15px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
 }
 </style>
 </head>
+
 <body>
 
-<!-- Landing / Play screen -->
 <div id="landing">
   <h1>Press Play to Continue 💖</h1>
   <button id="playBtn">Play 🎵</button>
 </div>
 
-<!-- Main question -->
-<div id="mainContent" style="display:none;">
-  <h1>Stuti, will you be my Valentine? 💘</h1>
+<div id="mainContent" style="display:none; flex-direction:column; align-items:center;">
+  <h1>Will you be my Valentine? 💘</h1>
   <div id="button-container">
     <button id="yes">Yes 💖</button>
     <button id="no">No</button>
   </div>
 </div>
 
-<!-- Audio -->
-<audio id="song" src="Justin%20Bieber%20-%20Love%20Me.mp3" preload="auto"></audio>
+<div id="modal">
+  <div id="modalContent">
+    <div id="modalText"></div>
+    <button id="closeModal">Close 💕</button>
+  </div>
+</div>
+
+<audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
 
 <script>
-// Elements
-const playBtn = document.getElementById('playBtn');
 const landing = document.getElementById('landing');
 const mainContent = document.getElementById('mainContent');
+const playBtn = document.getElementById('playBtn');
 const song = document.getElementById('song');
 
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-
-// --- PLAY BUTTON ---
-playBtn.addEventListener('click', async () => {
+playBtn.addEventListener('click', () => {
   landing.style.display = 'none';
   mainContent.style.display = 'flex';
-  mainContent.style.flexDirection = 'column';
-  mainContent.style.alignItems = 'center';
-  mainContent.style.justifyContent = 'center';
 
-  // Play audio after user action
-  try {
-    song.currentTime = 46; // 1s earlier than previous start
-    song.volume = 0.4;
-    await song.play();
+  song.currentTime = 48;
+  song.volume = 0.4;
+  song.play();
 
-    // Loop between 49s → 77s
-    song.addEventListener('timeupdate', () => {
-      if(song.currentTime >= 79){
-        song.currentTime = 46;
-        song.play();
-      }
-    });
-  } catch(err) {
-    alert("Tap Play again 💖");
-  }
+  let fading = false;
 
-  // Hearts animation
-  const createHeart = () => {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.top = Math.random() * window.innerHeight + 'px';
-    heart.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
-  };
-  setInterval(createHeart, 400);
+  song.addEventListener('timeupdate', () => {
+    if (!fading && song.currentTime >= 78.5) {
+      fading = true;
+
+      let fadeOut = setInterval(() => {
+        if (song.volume > 0.05) {
+          song.volume -= 0.05;
+        } else {
+          clearInterval(fadeOut);
+
+          song.currentTime = 48;
+
+          let fadeIn = setInterval(() => {
+            if (song.volume < 0.4) {
+              song.volume += 0.05;
+            } else {
+              song.volume = 0.4;
+              clearInterval(fadeIn);
+              fading = false;
+            }
+          }, 40);
+        }
+      }, 40);
+    }
+  });
 });
 
-// --- YES BUTTON MESSAGE ---
-yesBtn.addEventListener("click", () => {
-  alert(
-`Look at that… 💖
+/* Hearts */
+setInterval(() => {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.top = Math.random() * window.innerHeight + 'px';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 4000);
+}, 400);
 
-Miss “He’s not romantic enough” 
-just chose me. 😏
+/* Modal */
+const modal = document.getElementById('modal');
+const modalText = document.getElementById('modalText');
+const closeModal = document.getElementById('closeModal');
 
-Lucky for you, I actually love trying to impress you.  
-
-Happy Valentine’s, Stuti! 💕`
-  );
+document.getElementById('yes').addEventListener('click', () => {
+  modalText.innerHTML = `
+  <p>Look at that… 💖</p>
+  <p><strong>Miss “You’re not romantic enough”</strong> just chose me. 😌</p>
+  <p>Lucky for you, I actually love trying to impress you.</p>
+  <p><strong>Happy Valentine’s. 💕</strong></p>
+  `;
+  modal.style.display = 'flex';
 });
 
-// --- NO BUTTON MESSAGES ---
+closeModal.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+/* No Button */
+const noBtn = document.getElementById("no");
 const messages = [
-  "Not happening! 😏",
-  "Seriously, try again! 😅",
-  "Haha, you can’t escape! 😌",
-  "One more click and I’m gone! 💔"
+  "Not happening. 😌",
+  "Still not an option.",
+  "Nice try.",
+  "One more click and I disappear."
 ];
 
 let clickCount = 0;
+
 noBtn.addEventListener("click", () => {
-  if(clickCount < messages.length){
+  if(clickCount < messages.length) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = messages[clickCount];
     noBtn.appendChild(toast);
-    setTimeout(() => toast.remove(), 2000);
 
-    // Shrink No button proportionally
-    let scale = 1 - 0.1 * (clickCount + 1);
-    noBtn.style.transform = `scale(${scale})`;
+    setTimeout(() => toast.remove(), 2000);
 
     clickCount++;
 
-    if(clickCount === messages.length){
-      setTimeout(() => noBtn.remove(), 2200);
+    if(clickCount === messages.length) {
+      setTimeout(() => noBtn.remove(), 2000);
     }
   }
 });
@@ -256,5 +294,3 @@ noBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
-
