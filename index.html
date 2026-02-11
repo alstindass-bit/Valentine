@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
-/* --- Body & Fonts --- */
 body, html {
   margin: 0;
   padding: 0;
@@ -17,7 +16,6 @@ body, html {
   background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
-/* --- Heading --- */
 h1 {
   color: #fff;
   font-size: 2.2rem;
@@ -25,7 +23,6 @@ h1 {
   text-shadow: 1px 1px 5px #ff4d6d;
 }
 
-/* --- Landing Page --- */
 #landing {
   position: absolute;
   top:0; left:0; right:0; bottom:0;
@@ -51,7 +48,6 @@ h1 {
 
 #landing button:hover { transform: scale(1.05); }
 
-/* --- Main Content --- */
 #mainContent {
   display:none;
   flex-direction: column;
@@ -61,7 +57,6 @@ h1 {
   position: relative;
 }
 
-/* --- Buttons --- */
 #button-container {
   display:flex;
   justify-content:center;
@@ -85,7 +80,6 @@ button {
 
 button:hover { transform: scale(1.05); }
 
-/* --- Toast --- */
 .toast {
   position:absolute;
   background: rgba(255,255,255,0.95);
@@ -95,15 +89,14 @@ button:hover { transform: scale(1.05); }
   font-size:0.95rem;
   top:100%;
   left:50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(0);
   white-space: nowrap;
   margin-top:8px;
   pointer-events:none;
   opacity:0;
-  transition: opacity 0.3s;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-/* --- Heart Sparkles --- */
 .heart-sparkle {
   position: absolute;
   width: 15px;
@@ -111,16 +104,15 @@ button:hover { transform: scale(1.05); }
   background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
   background-size: contain;
   pointer-events: none;
-  animation: sparkleAnim 0.6s ease-out forwards;
+  animation: sparkleAnim 0.7s ease-out forwards;
 }
 
 @keyframes sparkleAnim {
-  0% { transform: scale(0) translateY(0); opacity:1; }
-  50% { transform: scale(1.5) translateY(-15px); opacity:1; }
-  100% { transform: scale(0) translateY(-30px); opacity:0; }
+  0% { transform: scale(0); opacity:1; }
+  50% { transform: scale(1.6); opacity:1; }
+  100% { transform: scale(0); opacity:0; }
 }
 
-/* --- Floating Hearts for final reveal --- */
 .floating-heart {
   position: absolute;
   width: 18px;
@@ -128,16 +120,15 @@ button:hover { transform: scale(1.05); }
   background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
   background-size: contain;
   pointer-events:none;
-  animation: floatUp 3s linear forwards;
+  animation: floatUp 4s linear forwards;
   opacity:0.8;
 }
 
 @keyframes floatUp {
   0% { transform: translateY(0) scale(1); opacity:1; }
-  100% { transform: translateY(-150px) scale(0.6); opacity:0; }
+  100% { transform: translateY(-180px) scale(0.6); opacity:0; }
 }
 
-/* --- Beating Hearts --- */
 .heart {
   position:absolute;
   width:20px;
@@ -150,7 +141,6 @@ button:hover { transform: scale(1.05); }
 
 @keyframes beat { 0%,100% {transform: scale(1);} 50% {transform: scale(1.4);} }
 
-/* --- Modal --- */
 #modal {
   position: fixed;
   top:0; left:0; right:0; bottom:0;
@@ -159,7 +149,11 @@ button:hover { transform: scale(1.05); }
   justify-content:center;
   align-items:center;
   z-index: 100;
+  opacity:0;
+  transition: opacity 0.5s ease;
 }
+
+#modal.show { opacity:1; }
 
 #modalContent {
   background:white;
@@ -171,12 +165,28 @@ button:hover { transform: scale(1.05); }
   font-size:1rem;
   white-space: pre-line;
   position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity:0;
 }
 
-/* --- Glow --- */
-.glow { box-shadow: 0 0 15px 5px #ff4d6d; }
+#modal.show #modalContent {
+  transform: scale(1);
+  opacity:1;
+}
 
-/* --- Mobile --- */
+#closeModal {
+  position:absolute;
+  top:8px;
+  right:12px;
+  font-size:1.2rem;
+  cursor:pointer;
+  color:#ff4d6d;
+}
+
+.glow { box-shadow: 0 0 20px 8px #ff4d6d; animation: glowPulse 1.2s infinite; }
+@keyframes glowPulse { 0%,100%{ box-shadow:0 0 20px 8px #ff4d6d;} 50% {box-shadow:0 0 30px 12px #ff4d6d;} }
+
 @media (max-width:600px){
   #button-container { flex-direction: column; }
   button { width:140px; }
@@ -186,13 +196,11 @@ button:hover { transform: scale(1.05); }
 </head>
 <body>
 
-<!-- Landing Page -->
 <div id="landing">
   <h1>Press Play to Continue 💖</h1>
   <button id="playBtn">Play 🎵</button>
 </div>
 
-<!-- Main Content -->
 <div id="mainContent">
   <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
@@ -201,12 +209,12 @@ button:hover { transform: scale(1.05); }
   </div>
 </div>
 
-<!-- Modal -->
 <div id="modal">
-  <div id="modalContent"></div>
+  <div id="modalContent">
+    <span id="closeModal">&times;</span>
+  </div>
 </div>
 
-<!-- Audio -->
 <audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
 
 <script>
@@ -228,22 +236,16 @@ const messages = [
   "This is it… No’s officially off the table 😏✨"
 ];
 
-// --- Landing Play ---
+// --- Landing ---
 playBtn.addEventListener("click", async () => {
   landing.style.display="none";
   mainContent.style.display="flex";
-
-  // Play song 48s → 79s loop
   song.currentTime = 48;
   await song.play();
   song.volume = 0.4;
+  song.addEventListener("timeupdate", () => { if(song.currentTime >=79) song.currentTime=48; });
 
-  song.addEventListener("timeupdate", () => {
-    if(song.currentTime >= 79) song.currentTime = 48;
-  });
-
-  // Beating Hearts
-  setInterval(() => {
+  setInterval(()=> {
     const heart = document.createElement("div");
     heart.className="heart";
     heart.style.left=Math.random()*window.innerWidth+"px";
@@ -256,31 +258,25 @@ playBtn.addEventListener("click", async () => {
 
 // --- Yes Button ---
 yesBtn.addEventListener("click", () => {
-  // Heart sparkles on click
   for(let i=0;i<12;i++){
     const sparkle = document.createElement("div");
     sparkle.className="heart-sparkle";
     sparkle.style.left = (yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
     sparkle.style.top = (yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
     document.body.appendChild(sparkle);
-    setTimeout(()=>sparkle.remove(),600);
+    setTimeout(()=>sparkle.remove(),700);
   }
 
-  // Floating hearts behind modal
   const heartInterval = setInterval(()=>{
     const fHeart = document.createElement("div");
     fHeart.className="floating-heart";
     fHeart.style.left = Math.random()*window.innerWidth+"px";
     fHeart.style.bottom = "-20px";
     document.body.appendChild(fHeart);
-    setTimeout(()=>fHeart.remove(),3000);
-  },150);
+    setTimeout(()=>fHeart.remove(),4000);
+  },250);
 
-  // Stop hearts when modal closes
-  const stopHearts = ()=>clearInterval(heartInterval);
-
-  // Show modal
-  modalContent.textContent = `Look at that… 💖
+  modalContent.innerHTML = `<span id="closeModal">&times;</span>Look at that… 💖
 
 Miss “He’s not romantic enough” 
 just chose me. 😏
@@ -288,42 +284,42 @@ just chose me. 😏
 Lucky for you, I actually love trying to impress you.  
 
 Happy Valentine’s! 💕`;
-  modal.style.display = "flex";
+  modal.style.display="flex";
+  setTimeout(()=> modal.classList.add("show"), 50);
 
-  modal.addEventListener("click", ()=>{
-    modal.style.display="none";
-    stopHearts();
-  }, {once:true});
+  document.getElementById("closeModal").addEventListener("click", ()=>{
+    modal.classList.remove("show");
+    setTimeout(()=> modal.style.display="none",300);
+    clearInterval(heartInterval);
+  });
 });
 
 // --- No Button ---
 noBtn.addEventListener("click", () => {
   if(noClicks < messages.length){
-    // Toast
     const toast = document.createElement("div");
     toast.className="toast";
     toast.textContent=messages[noClicks];
     noBtn.appendChild(toast);
-    setTimeout(()=>toast.style.opacity=1,10);
-    setTimeout(()=>toast.style.opacity=0,2000);
 
-    // Shrink
+    setTimeout(()=>{ toast.style.opacity=1; toast.style.transform="translateX(-50%) translateY(-8px)"; },50);
+    setTimeout(()=>{ toast.style.opacity=0; toast.style.transform="translateX(-50%) translateY(-16px)"; setTimeout(()=>toast.remove(),400); },1600);
+
     let scale = 1 - 0.1*(noClicks+1);
     noBtn.style.transform = `scale(${scale})`;
-
-    // Vibration & shake
     if(navigator.vibrate){ navigator.vibrate(150); }
     noBtn.style.animation="shake 0.2s";
     noBtn.addEventListener("animationend",()=>{ noBtn.style.animation=""; },{once:true});
 
     noClicks++;
-    
-    // Remove button after last toast
+
     if(noClicks === messages.length){
       setTimeout(()=>{
         noBtn.remove();
-        yesBtn.classList.add("glow"); // Yes button glows
-      },2200);
+        yesBtn.classList.add("glow");
+        yesBtn.style.animation="bounceYes 0.5s";
+        yesBtn.addEventListener("animationend",()=>{ yesBtn.style.animation=""; },{once:true});
+      },1900);
     }
   }
 });
@@ -336,6 +332,14 @@ style.innerHTML=`@keyframes shake {
   50% { transform: translateX(5px) scale(1); }
   75% { transform: translateX(-5px) scale(1); }
   100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes bounceYes {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  50% { transform: scale(0.95); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }`;
 document.head.appendChild(style);
 </script>
