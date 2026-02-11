@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
+/* --- Body & Fonts --- */
 body, html {
   margin: 0;
   padding: 0;
@@ -16,6 +17,7 @@ body, html {
   background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
+/* --- Heading --- */
 h1 {
   color: #fff;
   font-size: 2.2rem;
@@ -23,6 +25,7 @@ h1 {
   text-shadow: 1px 1px 5px #ff4d6d;
 }
 
+/* --- Landing Page --- */
 #landing {
   position: absolute;
   top:0; left:0; right:0; bottom:0;
@@ -32,6 +35,7 @@ h1 {
   align-items:center;
   z-index: 20;
   color:white;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
 #landing button {
@@ -46,8 +50,11 @@ h1 {
   transition: transform 0.2s;
 }
 
-#landing button:hover { transform: scale(1.05); }
+#landing button:hover {
+  transform: scale(1.05);
+}
 
+/* --- Main Content --- */
 #mainContent {
   display:none;
   flex-direction: column;
@@ -57,6 +64,7 @@ h1 {
   position: relative;
 }
 
+/* --- Buttons --- */
 #button-container {
   display:flex;
   justify-content:center;
@@ -72,14 +80,25 @@ button {
   border:none;
   border-radius:12px;
   cursor:pointer;
-  transition: transform 0.2s, width 0.2s, height 0.2s, box-shadow 0.3s;
+  transition: transform 0.2s, width 0.2s, height 0.2s;
 }
 
-#yes { background-color:#ff4d6d; color:white; }
-#no { background-color:#6c757d; color:white; position:relative; }
+#yes {
+  background-color:#ff4d6d;
+  color:white;
+}
 
-button:hover { transform: scale(1.05); }
+#no {
+  background-color:#6c757d;
+  color:white;
+  position:relative;
+}
 
+button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Toast --- */
 .toast {
   position:absolute;
   background: rgba(255,255,255,0.95);
@@ -89,46 +108,15 @@ button:hover { transform: scale(1.05); }
   font-size:0.95rem;
   top:100%;
   left:50%;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%);
   white-space: nowrap;
   margin-top:8px;
   pointer-events:none;
   opacity:0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: opacity 0.3s;
 }
 
-.heart-sparkle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
-  background-size: contain;
-  pointer-events: none;
-  animation: sparkleAnim 0.7s ease-out forwards;
-}
-
-@keyframes sparkleAnim {
-  0% { transform: scale(0); opacity:1; }
-  50% { transform: scale(1.6); opacity:1; }
-  100% { transform: scale(0); opacity:0; }
-}
-
-.floating-heart {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
-  background-size: contain;
-  pointer-events:none;
-  animation: floatUp 4s linear forwards;
-  opacity:0.8;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity:1; }
-  100% { transform: translateY(-180px) scale(0.6); opacity:0; }
-}
-
+/* --- Beating Hearts --- */
 .heart {
   position:absolute;
   width:20px;
@@ -139,54 +127,82 @@ button:hover { transform: scale(1.05); }
   opacity:0.7;
 }
 
-@keyframes beat { 0%,100% {transform: scale(1);} 50% {transform: scale(1.4);} }
+@keyframes beat {
+  0%,100% {transform: scale(1);}
+  50% {transform: scale(1.4);}
+}
 
-#modal {
-  position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.7);
+/* --- Modal --- */
+#yesModal {
   display:none;
-  justify-content:center;
-  align-items:center;
-  z-index: 100;
-  opacity:0;
-  transition: opacity 0.5s ease;
-}
-
-#modal.show { opacity:1; }
-
-#modalContent {
-  background:white;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.95);
   color:#333;
-  padding:20px 30px;
   border-radius:12px;
-  max-width: 80%;
+  padding: 20px 30px;
+  width: 300px;
+  max-width:90%;
   text-align:left;
-  font-size:1rem;
-  white-space: pre-line;
-  position: relative;
-  transform: scale(0.9);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  z-index:50;
   opacity:0;
+  transition: opacity 0.4s;
 }
 
-#modal.show #modalContent {
-  transform: scale(1);
+#yesModal.show {
+  display:block;
   opacity:1;
 }
 
-#closeModal {
-  position:absolute;
-  top:8px;
-  right:12px;
-  font-size:1.2rem;
-  cursor:pointer;
-  color:#ff4d6d;
+#yesModal p {
+  margin: 12px 0;
+  line-height:1.4;
 }
 
-.glow { box-shadow: 0 0 20px 8px #ff4d6d; animation: glowPulse 1.2s infinite; }
-@keyframes glowPulse { 0%,100%{ box-shadow:0 0 20px 8px #ff4d6d;} 50% {box-shadow:0 0 30px 12px #ff4d6d;} }
+#closeModal {
+  display:block;
+  margin:15px auto 0;
+  padding:6px 12px;
+  border:none;
+  border-radius:8px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  font-size:1rem;
+}
 
+/* --- Sparkle --- */
+.sparkle {
+  position:absolute;
+  width:10px;
+  height:10px;
+  background: radial-gradient(circle, #fff, #ffd1dc);
+  border-radius:50%;
+  opacity:0.8;
+  animation: sparkleAnim 0.8s forwards;
+}
+
+@keyframes sparkleAnim {
+  0% {transform: scale(0); opacity:0.8;}
+  50% {transform: scale(1.5); opacity:1;}
+  100% {transform: scale(0); opacity:0;}
+}
+
+/* --- Glow / Beat for Yes Button --- */
+@keyframes heartBeat {
+  0%,100% {transform: scale(1);}
+  50% {transform: scale(1.2);}
+}
+.glow {
+  box-shadow: 0 0 15px #ff4d6d, 0 0 30px #ff4d6d, 0 0 50px #ff99aa;
+  border:2px solid #ff4d6d;
+  animation: heartBeat 1s infinite;
+}
+
+/* --- Mobile --- */
 @media (max-width:600px){
   #button-container { flex-direction: column; }
   button { width:140px; }
@@ -196,11 +212,13 @@ button:hover { transform: scale(1.05); }
 </head>
 <body>
 
+<!-- Landing Page -->
 <div id="landing">
   <h1>Press Play to Continue 💖</h1>
   <button id="playBtn">Play 🎵</button>
 </div>
 
+<!-- Main Content -->
 <div id="mainContent">
   <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
@@ -209,12 +227,16 @@ button:hover { transform: scale(1.05); }
   </div>
 </div>
 
-<div id="modal">
-  <div id="modalContent">
-    <span id="closeModal">&times;</span>
-  </div>
+<!-- Modal for Yes -->
+<div id="yesModal">
+  <p>Told ya… I was the only option! 💖 Victory is mine! 💖 and so are you 💖</p>
+  <p>Remember when you said I’m “not romantic enough”? Consider this my grand proof.</p>
+  <p>Lucky for you, I actually love trying to impress you.</p>
+  <p>Happy Valentine’s! 💕</p>
+  <button id="closeModal">Close</button>
 </div>
 
+<!-- Audio -->
 <audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
 
 <script>
@@ -225,8 +247,9 @@ const song = document.getElementById("song");
 
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
-const modal = document.getElementById("modal");
-const modalContent = document.getElementById("modalContent");
+
+const yesModal = document.getElementById("yesModal");
+const closeModal = document.getElementById("closeModal");
 
 let noClicks = 0;
 const messages = [
@@ -236,112 +259,87 @@ const messages = [
   "This is it… No’s officially off the table 😏✨"
 ];
 
-// --- Landing ---
+// --- Landing Play ---
 playBtn.addEventListener("click", async () => {
-  landing.style.display="none";
-  mainContent.style.display="flex";
-  song.currentTime = 48;
-  await song.play();
-  song.volume = 0.4;
-  song.addEventListener("timeupdate", () => { if(song.currentTime >=79) song.currentTime=48; });
+  try {
+    landing.style.display="none";
+    mainContent.style.display="flex";
 
-  setInterval(()=> {
-    const heart = document.createElement("div");
-    heart.className="heart";
-    heart.style.left=Math.random()*window.innerWidth+"px";
-    heart.style.top=Math.random()*window.innerHeight+"px";
-    heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),4000);
-  },400);
+    // Play song starting at 48s → 79s loop
+    song.currentTime = 48;
+    await song.play();
+    song.volume = 0.4;
+
+    song.addEventListener("timeupdate", () => {
+      if(song.currentTime >= 79) song.currentTime = 48;
+    });
+
+    // Beating Hearts
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className="heart";
+      heart.style.left=Math.random()*window.innerWidth+"px";
+      heart.style.top=Math.random()*window.innerHeight+"px";
+      heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),4000);
+    },400);
+
+  } catch(e){
+    alert("Tap Play again 💖");
+  }
 });
 
 // --- Yes Button ---
 yesBtn.addEventListener("click", () => {
-  for(let i=0;i<12;i++){
+  yesModal.classList.add("show");
+
+  // Sparkles
+  for(let i=0;i<15;i++){
     const sparkle = document.createElement("div");
-    sparkle.className="heart-sparkle";
+    sparkle.className="sparkle";
     sparkle.style.left = (yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
     sparkle.style.top = (yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
     document.body.appendChild(sparkle);
-    setTimeout(()=>sparkle.remove(),700);
+    setTimeout(()=>sparkle.remove(),800);
   }
+});
 
-  const heartInterval = setInterval(()=>{
-    const fHeart = document.createElement("div");
-    fHeart.className="floating-heart";
-    fHeart.style.left = Math.random()*window.innerWidth+"px";
-    fHeart.style.bottom = "-20px";
-    document.body.appendChild(fHeart);
-    setTimeout(()=>fHeart.remove(),4000);
-  },250);
-
-  modalContent.innerHTML = `<span id="closeModal">&times;</span>Look at that… 💖
-
-Miss “He’s not romantic enough” 
-just chose me. 😏
-
-Lucky for you, I actually love trying to impress you.  
-
-Happy Valentine’s! 💕`;
-  modal.style.display="flex";
-  setTimeout(()=> modal.classList.add("show"), 50);
-
-  document.getElementById("closeModal").addEventListener("click", ()=>{
-    modal.classList.remove("show");
-    setTimeout(()=> modal.style.display="none",300);
-    clearInterval(heartInterval);
-  });
+// Close modal
+closeModal.addEventListener("click", () => {
+  yesModal.classList.remove("show");
 });
 
 // --- No Button ---
 noBtn.addEventListener("click", () => {
   if(noClicks < messages.length){
+    // Vibration for wrong choice
+    if(navigator.vibrate) navigator.vibrate(150);
+
+    // Show toast
     const toast = document.createElement("div");
     toast.className="toast";
     toast.textContent=messages[noClicks];
     noBtn.appendChild(toast);
+    setTimeout(()=>toast.style.opacity=1,50);
+    setTimeout(()=>toast.style.opacity=0,2000);
 
-    setTimeout(()=>{ toast.style.opacity=1; toast.style.transform="translateX(-50%) translateY(-8px)"; },50);
-    setTimeout(()=>{ toast.style.opacity=0; toast.style.transform="translateX(-50%) translateY(-16px)"; setTimeout(()=>toast.remove(),400); },1600);
-
+    // Shrink button slightly
     let scale = 1 - 0.1*(noClicks+1);
     noBtn.style.transform = `scale(${scale})`;
-    if(navigator.vibrate){ navigator.vibrate(150); }
-    noBtn.style.animation="shake 0.2s";
-    noBtn.addEventListener("animationend",()=>{ noBtn.style.animation=""; },{once:true});
 
     noClicks++;
 
+    // Remove button after last toast
     if(noClicks === messages.length){
       setTimeout(()=>{
         noBtn.remove();
+        // Glow & beat Yes button
         yesBtn.classList.add("glow");
-        yesBtn.style.animation="bounceYes 0.5s";
-        yesBtn.addEventListener("animationend",()=>{ yesBtn.style.animation=""; },{once:true});
-      },1900);
+      },2200);
     }
   }
 });
-
-// --- Shake animation ---
-const style = document.createElement('style');
-style.innerHTML=`@keyframes shake {
-  0% { transform: translateX(0) scale(1); }
-  25% { transform: translateX(-5px) scale(1); }
-  50% { transform: translateX(5px) scale(1); }
-  75% { transform: translateX(-5px) scale(1); }
-  100% { transform: translateX(0) scale(1); }
-}
-
-@keyframes bounceYes {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.15); }
-  50% { transform: scale(0.95); }
-  70% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}`;
-document.head.appendChild(style);
 </script>
 </body>
 </html>
