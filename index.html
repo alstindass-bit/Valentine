@@ -103,13 +103,13 @@ button:hover { transform: scale(1.05); }
   transition: opacity 0.3s;
 }
 
-/* --- Sparkles --- */
-.sparkle {
+/* --- Heart Sparkles --- */
+.heart-sparkle {
   position: absolute;
   width: 15px;
   height: 15px;
-  background: radial-gradient(circle, #fff 0%, #ff4d6d 70%);
-  border-radius: 50%;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+  background-size: contain;
   pointer-events: none;
   animation: sparkleAnim 0.6s ease-out forwards;
 }
@@ -118,6 +118,23 @@ button:hover { transform: scale(1.05); }
   0% { transform: scale(0) translateY(0); opacity:1; }
   50% { transform: scale(1.5) translateY(-15px); opacity:1; }
   100% { transform: scale(0) translateY(-30px); opacity:0; }
+}
+
+/* --- Floating Hearts for final reveal --- */
+.floating-heart {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+  background-size: contain;
+  pointer-events:none;
+  animation: floatUp 3s linear forwards;
+  opacity:0.8;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity:1; }
+  100% { transform: translateY(-150px) scale(0.6); opacity:0; }
 }
 
 /* --- Beating Hearts --- */
@@ -157,9 +174,7 @@ button:hover { transform: scale(1.05); }
 }
 
 /* --- Glow --- */
-.glow {
-  box-shadow: 0 0 15px 5px #ff4d6d;
-}
+.glow { box-shadow: 0 0 15px 5px #ff4d6d; }
 
 /* --- Mobile --- */
 @media (max-width:600px){
@@ -218,7 +233,7 @@ playBtn.addEventListener("click", async () => {
   landing.style.display="none";
   mainContent.style.display="flex";
 
-  // Play song starting at 48s → 79s loop
+  // Play song 48s → 79s loop
   song.currentTime = 48;
   await song.play();
   song.volume = 0.4;
@@ -241,15 +256,28 @@ playBtn.addEventListener("click", async () => {
 
 // --- Yes Button ---
 yesBtn.addEventListener("click", () => {
-  // Sparkles
-  for(let i=0;i<10;i++){
+  // Heart sparkles on click
+  for(let i=0;i<12;i++){
     const sparkle = document.createElement("div");
-    sparkle.className="sparkle";
+    sparkle.className="heart-sparkle";
     sparkle.style.left = (yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
     sparkle.style.top = (yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
     document.body.appendChild(sparkle);
     setTimeout(()=>sparkle.remove(),600);
   }
+
+  // Floating hearts behind modal
+  const heartInterval = setInterval(()=>{
+    const fHeart = document.createElement("div");
+    fHeart.className="floating-heart";
+    fHeart.style.left = Math.random()*window.innerWidth+"px";
+    fHeart.style.bottom = "-20px";
+    document.body.appendChild(fHeart);
+    setTimeout(()=>fHeart.remove(),3000);
+  },150);
+
+  // Stop hearts when modal closes
+  const stopHearts = ()=>clearInterval(heartInterval);
 
   // Show modal
   modalContent.textContent = `Look at that… 💖
@@ -261,9 +289,12 @@ Lucky for you, I actually love trying to impress you.
 
 Happy Valentine’s! 💕`;
   modal.style.display = "flex";
-});
 
-modal.addEventListener("click", () => { modal.style.display="none"; });
+  modal.addEventListener("click", ()=>{
+    modal.style.display="none";
+    stopHearts();
+  }, {once:true});
+});
 
 // --- No Button ---
 noBtn.addEventListener("click", () => {
