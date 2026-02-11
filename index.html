@@ -5,60 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
-  /* BODY & GENERAL */
-  body, html {
+  body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
     min-height: 100vh;
     text-align: center;
     overflow: hidden;
+    background: linear-gradient(135deg, #ffb6c1, #ff4d6d);
   }
 
-  /* LANDING SCREEN */
+  /* Landing Page */
   #landing {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #ffc1cc, #ffb6c1);
   }
   #landing h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 2.2rem;
     color: #fff;
-    text-shadow: 1px 1px 4px #ff4d6d;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px #800000;
   }
   #playBtn {
-    padding: 15px 30px;
     font-size: 1.5rem;
+    padding: 15px 40px;
+    border: none;
     border-radius: 12px;
     cursor: pointer;
     background-color: #ff4d6d;
     color: white;
-    border: none;
-    transition: transform 0.2s;
   }
-  #playBtn:hover { transform: scale(1.05); }
 
-  /* MAIN CONTENT */
+  /* Main Content */
   #mainContent {
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #ffe6f0, #ffccd5);
     position: relative;
-    overflow: hidden;
   }
-
   h1 {
     color: #fff;
     font-size: 2.2rem;
     margin: 20px;
-    text-shadow: 1px 1px 5px #ff4d6d;
+    text-shadow: 1px 1px 5px #800000;
   }
 
   #button-container {
@@ -66,10 +60,10 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    position: relative;
-    width: 100%;
     max-width: 400px;
+    width: 100%;
     margin-top: 30px;
+    position: relative;
   }
 
   button {
@@ -79,18 +73,17 @@
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.2s, width 0.2s, height 0.2s;
-    z-index: 2;
     flex: 1;
+    z-index: 2;
   }
-  button:hover { transform: scale(1.05); }
+  button:hover { transform: scale(1.1); }
 
   #yes { background-color: #ff4d6d; color: white; }
   #no { background-color: #6c757d; color: white; touch-action: none; }
 
-  /* TOAST MESSAGES */
   #toast {
     position: absolute;
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.9);
     padding: 10px 20px;
     border-radius: 12px;
     color: #333;
@@ -104,7 +97,7 @@
     margin-top: 10px;
   }
 
-  /* BEATING HEARTS */
+  /* Beating Hearts */
   .heart {
     position: absolute;
     width: 20px;
@@ -124,34 +117,25 @@
   }
   .heart::before { top: -10px; left: 0; }
   .heart::after { left: 10px; top: 0; }
-
   @keyframes beat {
-    0%, 100% { transform: scale(1) rotate(-45deg); }
+    0%,100% { transform: scale(1) rotate(-45deg); }
     50% { transform: scale(1.3) rotate(-45deg); }
   }
 
-  /* MOBILE STACKING */
   @media (max-width: 600px) {
-    #button-container {
-      flex-direction: column;
-    }
-    #toast {
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    #button-container { flex-direction: column; }
   }
 </style>
 </head>
 <body>
 
-<!-- LANDING PAGE -->
+<!-- Landing Page -->
 <div id="landing">
   <h1>Press Play to Start 💖</h1>
   <button id="playBtn">Play 💖</button>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- Main Content -->
 <div id="mainContent">
   <h1>Stuti, will you be my Valentine? 💘</h1>
   <div id="button-container">
@@ -161,7 +145,7 @@
   </div>
 </div>
 
-<!-- AUDIO -->
+<!-- Audio -->
 <audio id="song" src="Justin%20Bieber%20-%20Love%20Me.mp3" preload="auto"></audio>
 
 <script>
@@ -176,7 +160,6 @@ const toast = document.getElementById("toast");
 
 let noClicks = 0;
 const maxNoClicks = 4;
-
 const messages = [
   "Haha, you can't escape! 😌",
   "Nope, not an option! 💖",
@@ -187,11 +170,14 @@ const messages = [
 // --- PLAY BUTTON FLOW ---
 playBtn.addEventListener("click", async () => {
   try {
-    await song.play();
     song.volume = 0.4;
-    song.addEventListener("ended", () => {
-      song.currentTime = 0;
-      song.play();
+    song.currentTime = 46; // start at 46s
+    await song.play();
+    song.addEventListener("timeupdate", () => {
+      if(song.currentTime >= 79){ // end at 1:19 = 79s
+        song.currentTime = 46;
+        song.play();
+      }
     });
 
     landing.style.display = "none";
@@ -226,33 +212,20 @@ Happy Valentine’s, Stuti. 💕`);
 
 // --- NO BUTTON ---
 noBtn.addEventListener("click", () => {
-  if (noClicks < maxNoClicks - 1) {
+  if(noClicks < maxNoClicks - 1){
     toast.innerText = messages[noClicks];
     toast.style.opacity = 1;
     noBtn.style.width = noBtn.offsetWidth * 0.8 + "px";
     noBtn.style.height = noBtn.offsetHeight * 0.8 + "px";
     noClicks++;
   } else {
-    // last message
     toast.innerText = messages[noClicks];
     toast.style.opacity = 1;
-    setTimeout(() => {
-      noBtn.style.display = "none";
-    }, 1200);
+    setTimeout(() => { noBtn.style.display = "none"; }, 1200);
   }
-  // hide toast after 1.2s
   setTimeout(() => toast.style.opacity = 0, 1200);
 });
-
-// --- RESPONSIVE NO BUTTON ---
-window.addEventListener("resize", () => {
-  const maxX = window.innerWidth - noBtn.offsetWidth - 10;
-  const maxY = window.innerHeight - noBtn.offsetHeight - 10;
-  const left = parseFloat(noBtn.style.left) || 0;
-  const top = parseFloat(noBtn.style.top) || 0;
-  if (left > maxX) noBtn.style.left = maxX + "px";
-  if (top > maxY) noBtn.style.top = maxY + "px";
-});
 </script>
+
 </body>
 </html>
