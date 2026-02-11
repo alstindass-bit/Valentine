@@ -5,226 +5,262 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
-  /* --- Body & Fonts --- */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #ff0000;
-    overflow: hidden;
-    position: relative;
-  }
+/* --- Body & Fonts --- */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
+  overflow: hidden;
+  position: relative;
+}
 
-  h1 {
-    color: #fff;
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
+/* --- Heading --- */
+h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
 
-  /* --- Button Container --- */
+/* --- Button Container --- */
+#button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+
+/* --- Buttons --- */
+button {
+  width: 180px;
+  font-size: 1.2rem;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, width 0.2s, height 0.2s;
+}
+
+#yes {
+  background-color: #ff4d6d;
+  color: white;
+}
+
+#no {
+  background-color: #6c757d;
+  color: white;
+  position: relative;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Toast Message --- */
+.toast {
+  position: absolute;
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  margin-top: 8px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* --- Mobile Layout --- */
+@media (max-width: 500px) {
   #button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
+    flex-direction: column;
   }
 
-  /* --- Buttons --- */
   button {
-    width: 180px;
-    font-size: 1.2rem;
-    padding: 14px 0;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.2s, width 0.2s, height 0.2s;
+    width: 160px;
   }
 
-  #yes {
-    background-color: #ff4d6d;
-    color: white;
-  }
-
-  #no {
-    background-color: #6c757d;
-    color: white;
-    position: relative; /* for toast positioning */
-  }
-
-  button:hover {
-    transform: scale(1.05);
-  }
-
-  /* --- Toast Message --- */
   .toast {
-    position: absolute;
-    background: rgba(255,255,255,0.9);
-    color: #000;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    top: 100%;
-    left: 50%;
+    top: auto;
+    bottom: -40px;
     transform: translateX(-50%);
-    white-space: nowrap;
-    margin-top: 8px;
-    z-index: 10;
-    pointer-events: none;
   }
+}
 
-  /* --- Mobile Layout --- */
-  @media (max-width: 500px) {
-    #button-container {
-      flex-direction: column;
-    }
+/* --- Beating Hearts --- */
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+  background-size: contain;
+  animation: beat 1s infinite;
+  opacity: 0.7;
+}
 
-    button {
-      width: 160px;
-    }
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+}
 
-    .toast {
-      top: auto;
-      bottom: -40px; /* show below No button */
-      transform: translateX(-50%);
-    }
-  }
+/* --- Landing Page --- */
+#landing {
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
+  z-index: 20;
+  color:white;
+}
 
-  /* --- Beating Hearts Background --- */
-  .heart {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
-    background-size: contain;
-    animation: beat 1s infinite;
-    opacity: 0.7;
-  }
+#landing button {
+  width:200px;
+  padding:15px 0;
+  font-size:1.3rem;
+  border:none;
+  border-radius:12px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  transition: transform 0.2s;
+}
 
-  @keyframes beat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.4); }
-  }
+#landing button:hover {
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
 
-<h1>Stuti, will you be my Valentine? 💘</h1>
-
-<div id="button-container">
-  <button id="yes">Yes 💖</button>
-  <button id="no">No</button>
+<!-- Landing / Play screen -->
+<div id="landing">
+  <h1>Press Play to Continue 💖</h1>
+  <button id="playBtn">Play 🎵</button>
 </div>
 
-<!-- YouTube API placeholder -->
+<!-- Main question -->
+<div id="mainContent" style="display:none;">
+  <h1>Stuti, will you be my Valentine? 💘</h1>
+  <div id="button-container">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No</button>
+  </div>
+</div>
+
+<!-- YouTube Player -->
 <div id="player"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-  /* --- YouTube Player Setup --- */
-  let player;
-  function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-      height: '0',
-      width: '0',
-      videoId: 'qdDVtFvJwUc',
-      playerVars: {
-        autoplay: 1,
-        controls: 0,
-        start: 47,
-        mute: 1,
-        modestbranding: 1
-      },
-      events: {
-        onReady: (event) => { event.target.playVideo(); },
-        onStateChange: (event) => {
-          if(event.data === YT.PlayerState.PLAYING) {
-            setInterval(() => {
-              if(player.getCurrentTime() >= 79) player.seekTo(47);
-            }, 300);
-          }
-        }
-      }
-    });
-  }
-
-  /* --- Beating Hearts Generation --- */
-  const createHeart = () => {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.top = Math.random() * window.innerHeight + 'px';
-    heart.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
-  };
-  setInterval(createHeart, 400);
-
-  /* --- Button Logic --- */
-  const yesBtn = document.getElementById("yes");
-  const noBtn = document.getElementById("no");
-
-  // Yes message
-  yesBtn.addEventListener("click", () => {
-    alert(
-`Look at that… 💖
-
-Miss “I’m not romantic enough”
-just chose me.
-
-I must be doing something right.
-
-But if this still doesn’t count,
-I guess I’ll just have to try harder.
-
-Lucky for you…
-I kind of like impressing you.
-
-Happy Valentine’s, Stuti. 😌💕`
-    );
-  });
-
-  // No button messages
-  const messages = [
-    "Not happening! 😏",
-    "Seriously, try again! 😅",
-    "One more click and I’m gone! 💔",
-    "Haha, you can’t escape! 😌"
-  ];
-
-  let clickCount = 0;
-
-  noBtn.addEventListener("click", () => {
-    if(clickCount < messages.length) {
-      // show toast
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = messages[clickCount];
-      noBtn.appendChild(toast);
-
-      setTimeout(() => toast.remove(), 2000);
-
-      // shrink button
-      let scale = 1 - 0.1 * (clickCount + 1);
-      noBtn.style.transform = `scale(${scale})`;
-      
-      clickCount++;
-      
-      // After last message, remove button on next click
-      if(clickCount === messages.length) {
-        setTimeout(() => {
-          noBtn.remove();
-        }, 2200); // allow last message to show
-      }
+let player;
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    videoId: 'qdDVtFvJwUc',
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      start: 47,
+      modestbranding: 1
     }
   });
+}
 
+// Landing Play Button
+const playBtn = document.getElementById('playBtn');
+const landing = document.getElementById('landing');
+const mainContent = document.getElementById('mainContent');
+
+playBtn.addEventListener('click', () => {
+  landing.style.display = 'none';
+  mainContent.style.display = 'flex';
+  mainContent.style.flexDirection = 'column';
+  mainContent.style.alignItems = 'center';
+  mainContent.style.justifyContent = 'center';
+  
+  // Play the song after user action
+  player.playVideo();
+
+  // Loop 47s → 79s
+  setInterval(() => {
+    if(player.getCurrentTime() >= 79) player.seekTo(47);
+  }, 300);
+});
+
+// Beating Hearts
+const createHeart = () => {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.top = Math.random() * window.innerHeight + 'px';
+  heart.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 4000);
+};
+setInterval(createHeart, 400);
+
+// Buttons
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+
+// Yes Button Message (Option 5)
+yesBtn.addEventListener("click", () => {
+  alert(
+`Look at that… 💖
+
+Miss “He’s not romantic enough” 
+just chose me. 😏
+
+Lucky for you, I actually love trying to impress you.  
+
+Happy Valentine’s, Stuti! 💕`
+  );
+});
+
+// No Button Messages
+const messages = [
+  "Not happening! 😏",
+  "Seriously, try again! 😅",
+  "Haha, you can’t escape! 😌",
+  "One more click and I’m gone! 💔"
+];
+
+let clickCount = 0;
+noBtn.addEventListener("click", () => {
+  if(clickCount < messages.length) {
+    // Show toast
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = messages[clickCount];
+    noBtn.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+
+    // Shrink button
+    let scale = 1 - 0.1 * (clickCount + 1);
+    noBtn.style.transform = `scale(${scale})`;
+
+    clickCount++;
+
+    // Remove button after last toast
+    if(clickCount === messages.length) {
+      setTimeout(() => noBtn.remove(), 2200);
+    }
+  }
+});
 </script>
+
 </body>
 </html>
