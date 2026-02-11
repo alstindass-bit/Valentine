@@ -5,48 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Stuti 💖</title>
 <style>
+  /* --- Body & Fonts --- */
   body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    text-align: center;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #ff0000;
     overflow: hidden;
-    text-align: center;
-    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    position: relative;
   }
 
   h1 {
     color: #fff;
-    font-size: 2.2rem;
-    margin: 20px;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    font-size: 2rem;
+    margin-bottom: 30px;
   }
 
+  /* --- Button Container --- */
   #button-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
     justify-content: center;
-    align-items: center;
-    margin-top: 30px;
+    gap: 20px;
+    position: relative;
   }
 
+  /* --- Buttons --- */
   button {
-    font-size: 1.3rem;
-    padding: 15px 30px;
+    width: 180px;
+    font-size: 1.2rem;
+    padding: 14px 0;
     border: none;
-    border-radius: 20px;
+    border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.2s ease;
-  }
-
-  button:hover {
-    transform: scale(1.1);
+    transition: transform 0.2s, width 0.2s, height 0.2s;
   }
 
   #yes {
@@ -57,59 +55,61 @@
   #no {
     background-color: #6c757d;
     color: white;
+    position: relative; /* for toast positioning */
   }
 
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  /* --- Toast Message --- */
   .toast {
     position: absolute;
-    background-color: rgba(255,255,255,0.95);
-    color: #333;
+    background: rgba(255,255,255,0.9);
+    color: #000;
     padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    pointer-events: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     white-space: nowrap;
-    z-index: 100;
+    margin-top: 8px;
+    z-index: 10;
+    pointer-events: none;
   }
 
+  /* --- Mobile Layout --- */
+  @media (max-width: 500px) {
+    #button-container {
+      flex-direction: column;
+    }
+
+    button {
+      width: 160px;
+    }
+
+    .toast {
+      top: auto;
+      bottom: -40px; /* show below No button */
+      transform: translateX(-50%);
+    }
+  }
+
+  /* --- Beating Hearts Background --- */
   .heart {
     position: absolute;
-    color: #fff;
-    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+    background-size: contain;
     animation: beat 1s infinite;
-    user-select: none;
-    opacity: 0.8;
-    pointer-events: none;
+    opacity: 0.7;
   }
 
   @keyframes beat {
-    0%,100%{ transform: scale(1); }
-    50%{ transform: scale(1.5); }
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 10px #ff4d6d; }
-    50% { transform: scale(1.2); box-shadow: 0 0 20px #ff4d6d; }
-    100% { transform: scale(1); box-shadow: 0 0 10px #ff4d6d; }
-  }
-
-  .pulse {
-    animation: pulse 1s infinite;
-  }
-
-  @media (max-width: 500px) {
-    h1 { font-size: 1.8rem; margin: 15px; }
-    #button-container { 
-        flex-direction: column; 
-        gap: 15px; 
-    }
-    button { 
-        width: 140px; 
-        padding: 12px 20px; 
-        font-size: 1.1rem; 
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
   }
 </style>
 </head>
@@ -122,158 +122,109 @@
   <button id="no">No</button>
 </div>
 
+<!-- YouTube API placeholder -->
 <div id="player"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-let player;
-
-// YouTube player setup
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    height: '0',
-    width: '0',
-    videoId: 'qdDVtFvJwUc',
-    playerVars: {
-      autoplay: 1,
-      controls: 0,
-      start: 47,
-      end: 79,
-      loop: 1,
-      playlist: 'qdDVtFvJwUc',
-      mute: 1,
-      modestbranding: 1
-    },
-    events: {
-      'onReady': (event) => {
-        event.target.playVideo();
-        // Segment loop 47s-79s
-        setInterval(() => {
-          if(player.getCurrentTime() >= 79){
-            player.seekTo(47);
+  /* --- YouTube Player Setup --- */
+  let player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '0',
+      width: '0',
+      videoId: 'qdDVtFvJwUc',
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        start: 47,
+        mute: 1,
+        modestbranding: 1
+      },
+      events: {
+        onReady: (event) => { event.target.playVideo(); },
+        onStateChange: (event) => {
+          if(event.data === YT.PlayerState.PLAYING) {
+            setInterval(() => {
+              if(player.getCurrentTime() >= 79) player.seekTo(47);
+            }, 300);
           }
-        }, 500);
+        }
+      }
+    });
+  }
+
+  /* --- Beating Hearts Generation --- */
+  const createHeart = () => {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.top = Math.random() * window.innerHeight + 'px';
+    heart.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 4000);
+  };
+  setInterval(createHeart, 400);
+
+  /* --- Button Logic --- */
+  const yesBtn = document.getElementById("yes");
+  const noBtn = document.getElementById("no");
+
+  // Yes message
+  yesBtn.addEventListener("click", () => {
+    alert(
+`Look at that… 💖
+
+Miss “I’m not romantic enough”
+just chose me.
+
+I must be doing something right.
+
+But if this still doesn’t count,
+I guess I’ll just have to try harder.
+
+Lucky for you…
+I kind of like impressing you.
+
+Happy Valentine’s, Stuti. 😌💕`
+    );
+  });
+
+  // No button messages
+  const messages = [
+    "Not happening! 😏",
+    "Seriously, try again! 😅",
+    "One more click and I’m gone! 💔",
+    "Haha, you can’t escape! 😌"
+  ];
+
+  let clickCount = 0;
+
+  noBtn.addEventListener("click", () => {
+    if(clickCount < messages.length) {
+      // show toast
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = messages[clickCount];
+      noBtn.appendChild(toast);
+
+      setTimeout(() => toast.remove(), 2000);
+
+      // shrink button
+      let scale = 1 - 0.1 * (clickCount + 1);
+      noBtn.style.transform = `scale(${scale})`;
+      
+      clickCount++;
+      
+      // After last message, remove button on next click
+      if(clickCount === messages.length) {
+        setTimeout(() => {
+          noBtn.remove();
+        }, 2200); // allow last message to show
       }
     }
   });
-}
 
-// Unmute on first tap for mobile
-document.addEventListener('click', () => {
-  if(player && player.isMuted()){
-    player.unMute();
-  }
-}, { once: true });
-
-// Buttons
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-
-yesBtn.addEventListener("click", () => {
-  alert("YAYYYY 💕\n\nStuti, you just made my day!\nYou’re officially my Valentine 💖\n\nScreenshot this and send it!");
-});
-
-// No button messages
-const messages = [
-  "💘 Nope… not happening!",
-  "💕 Still no! You can’t escape me!",
-  "💖 Are you trying? Cute, but NO!",
-  "💞 Haha! Giving up is not an option! 💖",
-  "❤️ One more click… and I’m gone! 😱"
-];
-
-let clickCount = 0;
-const maxClicks = 5;
-let currentWidth = noBtn.offsetWidth;
-let currentHeight = noBtn.offsetHeight;
-let currentFont = parseFloat(window.getComputedStyle(noBtn).fontSize);
-
-// Show toast depending on screen size
-function showToast(message, targetBtn){
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerText = message;
-
-  const rect = targetBtn.getBoundingClientRect();
-
-  if(window.innerWidth <= 500){
-    // Mobile: show below the button
-    toast.style.left = rect.left + 'px';
-    toast.style.top = rect.bottom + 10 + 'px';
-  } else {
-    // Desktop: show to the right
-    toast.style.left = rect.right + 10 + 'px';
-    toast.style.top = rect.top + 'px';
-  }
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.opacity = 1;
-    toast.style.transform = 'translateY(-10px)';
-  }, 10);
-
-  setTimeout(() => {
-    toast.style.opacity = 0;
-    toast.style.transform = 'translateY(-20px)';
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
-  }, 2000);
-}
-
-// Shrink No button
-function shrinkNoButton(){
-  if(clickCount < maxClicks-1){
-    // First 4 clicks: shrink + toast
-    clickCount++;
-    shrinkButton();
-    showToast(messages[clickCount-1], noBtn);
-  } else if(clickCount === maxClicks-1){
-    // 5th click: show "one more click" message
-    clickCount++;
-    showToast(messages[clickCount-1], noBtn);
-  } else {
-    // 6th click: disappear
-    noBtn.style.display = 'none';
-    yesBtn.classList.add('pulse');
-  }
-}
-
-function shrinkButton(){
-  const shrinkFactor = 0.85;
-  currentWidth *= shrinkFactor;
-  currentHeight *= shrinkFactor;
-  currentFont *= shrinkFactor;
-
-  noBtn.style.width = currentWidth + 'px';
-  noBtn.style.height = currentHeight + 'px';
-  noBtn.style.fontSize = currentFont + 'px';
-  noBtn.style.padding = (15 * Math.pow(shrinkFactor, clickCount)) + 'px ' + (30 * Math.pow(shrinkFactor, clickCount)) + 'px';
-}
-
-noBtn.addEventListener('click', shrinkNoButton);
-noBtn.addEventListener('touchstart', shrinkNoButton);
-
-// Beating hearts in background
-function createHeart(){
-  const heart = document.createElement('div');
-  heart.className = 'heart';
-  heart.innerHTML = '💖';
-  heart.style.left = Math.random() * window.innerWidth + 'px';
-  heart.style.top = Math.random() * window.innerHeight + 'px';
-  heart.style.fontSize = (10 + Math.random()*30) + 'px';
-  if(yesBtn.matches(':hover')) heart.style.transform = 'scale(2)';
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 1000);
-}
-setInterval(createHeart, 200);
-
-// Extra hearts when hovering Yes
-yesBtn.addEventListener('mouseenter', () => {
-  for(let i=0;i<10;i++) setTimeout(createHeart, i*100);
-});
 </script>
-
 </body>
 </html>
