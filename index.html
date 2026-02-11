@@ -186,7 +186,7 @@ playBtn.addEventListener('click', async () => {
     song.volume = 0.4;
     await song.play();
 
-    // Loop between 46s → 79s
+    // Loop between 47s → 78s
     song.addEventListener('timeupdate', () => {
       if(song.currentTime >= 79){
         song.currentTime = 46;
@@ -256,3 +256,4 @@ noBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
