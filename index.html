@@ -50,9 +50,7 @@ h1 {
   transition: transform 0.2s;
 }
 
-#landing button:hover {
-  transform: scale(1.05);
-}
+#landing button:hover { transform: scale(1.05); }
 
 /* --- Main Content --- */
 #mainContent {
@@ -81,24 +79,12 @@ button {
   border-radius:12px;
   cursor:pointer;
   transition: transform 0.2s, width 0.2s, height 0.2s;
-  position: relative;
-  overflow: visible;
 }
 
-#yes {
-  background-color:#ff4d6d;
-  color:white;
-}
+#yes { background-color:#ff4d6d; color:white; }
+#no { background-color:#6c757d; color:white; position:relative; }
 
-#no {
-  background-color:#6c757d;
-  color:white;
-  position:relative;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
+button:hover { transform: scale(1.05); }
 
 /* --- Toast --- */
 .toast {
@@ -110,29 +96,29 @@ button:hover {
   font-size:0.95rem;
   top:100%;
   left:50%;
-  transform: translateX(-50%) scale(0.8);
+  transform: translateX(-50%);
   white-space: nowrap;
   margin-top:8px;
   pointer-events:none;
   opacity:0;
-  transition: transform 0.2s, opacity 0.3s;
+  transition: opacity 0.3s;
 }
 
-/* --- Sparkle --- */
+/* --- Sparkles --- */
 .sparkle {
-  position:absolute;
-  width:10px;
-  height:10px;
-  background: gold;
-  border-radius:50%;
-  box-shadow: 0 0 8px gold, 0 0 12px yellow;
-  animation: sparkle 0.6s forwards;
-  pointer-events:none;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: radial-gradient(circle, #fff 0%, #ff4d6d 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkleAnim 0.6s ease-out forwards;
 }
-@keyframes sparkle {
-  0% { transform: scale(0.2); opacity:1; }
-  50% { transform: scale(1.2); opacity:1; }
-  100% { transform: scale(0); opacity:0; }
+
+@keyframes sparkleAnim {
+  0% { transform: scale(0) translateY(0); opacity:1; }
+  50% { transform: scale(1.5) translateY(-15px); opacity:1; }
+  100% { transform: scale(0) translateY(-30px); opacity:0; }
 }
 
 /* --- Beating Hearts --- */
@@ -146,16 +132,13 @@ button:hover {
   opacity:0.7;
 }
 
-@keyframes beat {
-  0%,100% {transform: scale(1);}
-  50% {transform: scale(1.4);}
-}
+@keyframes beat { 0%,100% {transform: scale(1);} 50% {transform: scale(1.4);} }
 
 /* --- Mobile --- */
 @media (max-width:600px){
   #button-container { flex-direction: column; }
   button { width:140px; }
-  .toast { top:auto; bottom:-40px; transform: translateX(-50%) scale(0.8);}
+  .toast { top:auto; bottom:-40px; transform: translateX(-50%);}
 }
 </style>
 </head>
@@ -198,41 +181,43 @@ const messages = [
 
 // --- Landing Play ---
 playBtn.addEventListener("click", async () => {
-  landing.style.display="none";
-  mainContent.style.display="flex";
-  mainContent.style.flexDirection="column";
-  mainContent.style.alignItems="center";
-  mainContent.style.justifyContent="center";
-  
-  song.currentTime = 48;
-  await song.play();
-  song.volume = 0.4;
+  try {
+    landing.style.display="none";
+    mainContent.style.display="flex";
 
-  // Smooth loop
-  song.addEventListener("timeupdate", () => {
-    if(song.currentTime >= 79) song.currentTime = 48;
-  });
+    // Play song starting at 48s → 79s loop
+    song.currentTime = 48;
+    await song.play();
+    song.volume = 0.4;
 
-  // Beating Hearts
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className="heart";
-    heart.style.left=Math.random()*window.innerWidth+"px";
-    heart.style.top=Math.random()*window.innerHeight+"px";
-    heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),4000);
-  },400);
+    song.addEventListener("timeupdate", () => {
+      if(song.currentTime >= 79) song.currentTime = 48;
+    });
+
+    // Beating Hearts
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className="heart";
+      heart.style.left=Math.random()*window.innerWidth+"px";
+      heart.style.top=Math.random()*window.innerHeight+"px";
+      heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),4000);
+    },400);
+
+  } catch(e){
+    alert("Tap Play again 💖");
+  }
 });
 
 // --- Yes Button ---
 yesBtn.addEventListener("click", () => {
-  // Sparkles
+  // Sparkles effect
   for(let i=0;i<8;i++){
     const sparkle = document.createElement("div");
     sparkle.className="sparkle";
-    sparkle.style.left=(yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
-    sparkle.style.top=(yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
+    sparkle.style.left = (yesBtn.offsetLeft + Math.random()*yesBtn.offsetWidth) + "px";
+    sparkle.style.top = (yesBtn.offsetTop + Math.random()*yesBtn.offsetHeight) + "px";
     document.body.appendChild(sparkle);
     setTimeout(()=>sparkle.remove(),600);
   }
@@ -251,26 +236,23 @@ Happy Valentine’s! 💕`
 
 // --- No Button ---
 noBtn.addEventListener("click", () => {
-  // Vibration hint
-  if(navigator.vibrate) navigator.vibrate(150);
-
   if(noClicks < messages.length){
     // Show toast
     const toast = document.createElement("div");
     toast.className="toast";
     toast.textContent=messages[noClicks];
     noBtn.appendChild(toast);
-    
-    // Pop effect for toast
     setTimeout(()=>toast.style.opacity=1,10);
-    toast.style.transform="translateX(-50%) scale(1.1)";
-    setTimeout(()=>toast.style.transform="translateX(-50%) scale(1)",100);
-
     setTimeout(()=>toast.style.opacity=0,2000);
 
     // Shrink button slightly
     let scale = 1 - 0.1*(noClicks+1);
     noBtn.style.transform = `scale(${scale})`;
+
+    // Vibration & shake
+    if(navigator.vibrate){ navigator.vibrate(150); }
+    noBtn.style.animation="shake 0.2s";
+    noBtn.addEventListener("animationend",()=>{ noBtn.style.animation=""; },{once:true});
 
     noClicks++;
     
@@ -280,6 +262,17 @@ noBtn.addEventListener("click", () => {
     }
   }
 });
+
+// --- Shake animation ---
+const style = document.createElement('style');
+style.innerHTML=`@keyframes shake {
+  0% { transform: translateX(0) scale(${noBtn.style.transform.replace('scale(','').replace(')','')||1}); }
+  25% { transform: translateX(-5px) scale(${noBtn.style.transform.replace('scale(','').replace(')','')||1}); }
+  50% { transform: translateX(5px) scale(${noBtn.style.transform.replace('scale(','').replace(')','')||1}); }
+  75% { transform: translateX(-5px) scale(${noBtn.style.transform.replace('scale(','').replace(')','')||1}); }
+  100% { transform: translateX(0) scale(${noBtn.style.transform.replace('scale(','').replace(')','')||1}); }
+}`;
+document.head.appendChild(style);
 </script>
 </body>
 </html>
