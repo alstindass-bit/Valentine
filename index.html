@@ -35,6 +35,7 @@ h1 {
   align-items:center;
   z-index: 20;
   color:white;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
 #landing button {
@@ -79,13 +80,12 @@ button {
   border:none;
   border-radius:12px;
   cursor:pointer;
-  transition: transform 0.2s, width 0.2s, height 0.2s, box-shadow 0.3s;
+  transition: transform 0.2s, width 0.2s, height 0.2s, box-shadow 0.2s;
 }
 
 #yes {
   background-color:#ff4d6d;
   color:white;
-  position: relative;
 }
 
 #no {
@@ -110,68 +110,21 @@ button:hover {
   left:50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  margin-top:8px;
   pointer-events:none;
   opacity:0;
   transition: opacity 0.3s;
 }
 
-/* --- Modal --- */
-#modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: rgba(255,255,255,0.95);
-  padding: 20px 25px;
-  border-radius: 16px;
-  box-shadow: 0 0 25px rgba(255,77,109,0.7);
-  color: #333;
-  max-width: 300px;
-  text-align: center;
-  z-index: 50;
-  display: none;
-  opacity: 0;
-  transition: all 0.4s ease;
+/* --- Heartbeat Animation --- */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25%, 75% { transform: scale(1.1); }
+  50% { transform: scale(1.2); }
 }
 
-#modal.show {
-  display: block;
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-#modal p {
-  margin: 15px 0;
-  line-height: 1.4rem;
-  font-size: 1rem;
-}
-
-#modal .close-btn {
-  margin-top: 15px;
-  padding: 6px 12px;
-  border:none;
-  border-radius:8px;
-  background:#ff4d6d;
-  color:white;
-  cursor:pointer;
-}
-
-/* --- Sparkle --- */
-.sparkle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: yellow;
-  border-radius: 50%;
-  box-shadow: 0 0 10px yellow;
-  animation: sparkle 0.8s forwards;
-}
-
-@keyframes sparkle {
-  0% {transform: scale(0.2); opacity:1;}
-  50% {transform: scale(1.2); opacity:0.8;}
-  100% {transform: scale(0); opacity:0;}
+.heartbeat {
+  animation: heartbeat 1s infinite;
+  box-shadow: 0 0 20px rgba(255,77,109,0.7);
 }
 
 /* --- Beating Hearts --- */
@@ -190,10 +143,48 @@ button:hover {
   50% {transform: scale(1.4);}
 }
 
-/* --- Heartbeat effect for Yes button --- */
-@keyframes yes-beat {
-  0%,100% { transform: scale(1); box-shadow: 0 0 20px #ff4d6d; }
-  50% { transform: scale(1.1); box-shadow: 0 0 30px #ff4d6d; }
+/* --- Modal --- */
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(255,255,255,0.95);
+  padding: 20px 25px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255,77,109,0.7);
+  color: #333;
+  max-width: 320px;
+  text-align: center;
+  z-index: 50;
+  display: none;
+  opacity: 0;
+  transition: all 0.4s ease;
+  line-height: 1.4;
+}
+
+#modal.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#modalClose {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#modalClose:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255,77,109,0.6);
 }
 
 /* --- Mobile --- */
@@ -201,7 +192,6 @@ button:hover {
   #button-container { flex-direction: column; }
   button { width:140px; }
   .toast { top:auto; bottom:-40px; transform: translateX(-50%);}
-  #modal { max-width: 250px; }
 }
 </style>
 </head>
@@ -224,8 +214,10 @@ button:hover {
 
 <!-- Modal -->
 <div id="modal">
-  <p id="modal-text"></p>
-  <button class="close-btn" id="closeModal">Close</button>
+  <div id="modalContent">
+    <p id="modalText"></p>
+    <button id="modalClose">Close</button>
+  </div>
 </div>
 
 <!-- Audio -->
@@ -236,11 +228,12 @@ const landing = document.getElementById("landing");
 const mainContent = document.getElementById("mainContent");
 const playBtn = document.getElementById("playBtn");
 const song = document.getElementById("song");
+
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const modal = document.getElementById("modal");
-const modalText = document.getElementById("modal-text");
-const closeModal = document.getElementById("closeModal");
+const modalClose = document.getElementById("modalClose");
+const modalText = document.getElementById("modalText");
 
 let noClicks = 0;
 const messages = [
@@ -281,53 +274,28 @@ playBtn.addEventListener("click", async () => {
   }
 });
 
-// --- Sparkle function ---
-function createSparkle(x, y) {
-  const s = document.createElement("div");
-  s.className = "sparkle";
-  s.style.left = x + "px";
-  s.style.top = y + "px";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),800);
-}
-
 // --- Yes Button ---
 yesBtn.addEventListener("click", () => {
-  // Determine scenario
-  let message = "";
-  if(document.body.contains(noBtn)){
-    // Scenario 1: Yes clicked before No disappears
-    message = `This is everything. 💖
-Your yes just lit fireworks in my heart, and I never want this moment to end.
-I’ll treasure this forever, holding your heart close to mine, and whispering all the love I have for you every single day. 💕`;
+  if(noClicks < messages.length) {
+    // Scenario 1: No button still present
+    modalText.innerHTML = `This is everything. 💖<br>
+    Your yes just lit fireworks in my heart, and I never want this moment to end.<br>
+    I’ll treasure this forever, holding your heart close to mine, and whispering all the love I have for you every single day. 💕`;
   } else {
-    // Scenario 2: Yes clicked after No disappears
-    message = `Told ya… I was the only option! 💖 Victory is mine! 💖 and so are you 💖
-Remember when you said I’m “not romantic enough”? Consider this my grand proof.  
-Lucky for you, I actually love trying to impress you.  
-Happy Valentine’s! 💕`;
+    // Scenario 2: No button gone
+    modalText.innerHTML = `Told ya… I was the only option! 💖 and so are you 💖<br>
+    Remember when you said I’m “not romantic enough”? Consider this my grand proof.<br>
+    Lucky for you, I actually love trying to impress you.<br>
+    Happy Valentine’s! 💕`;
   }
 
-  modalText.textContent = message;
   modal.classList.add("show");
-
-  // Sparkles around modal
-  for(let i=0;i<8;i++){
-    createSparkle(
-      modal.offsetLeft + Math.random()*modal.offsetWidth,
-      modal.offsetTop + Math.random()*modal.offsetHeight
-    );
-  }
-
-  // Yes button heartbeat if No button is gone
-  if(!document.body.contains(noBtn)){
-    yesBtn.style.animation = "yes-beat 1s infinite";
-    yesBtn.style.boxShadow = "0 0 25px #ff4d6d";
-  }
+  createSparkle(5); // sparkle/pop effect
+  yesBtn.classList.add("heartbeat");
 });
 
-// --- Close modal ---
-closeModal.addEventListener("click", () => {
+// --- Close Modal ---
+modalClose.addEventListener("click", () => {
   modal.classList.remove("show");
 });
 
@@ -342,8 +310,10 @@ noBtn.addEventListener("click", () => {
     setTimeout(()=>toast.style.opacity=1,10);
     setTimeout(()=>toast.style.opacity=0,2000);
 
-    // Vibrate if supported
-    if(navigator.vibrate) navigator.vibrate(100);
+    // Vibrate hint
+    if(navigator.vibrate){
+      navigator.vibrate(150);
+    }
 
     // Shrink button slightly
     let scale = 1 - 0.1*(noClicks+1);
@@ -354,10 +324,25 @@ noBtn.addEventListener("click", () => {
     // Remove button after last toast
     if(noClicks === messages.length){
       setTimeout(()=>noBtn.remove(),2200);
+      setTimeout(()=>yesBtn.classList.add("heartbeat"), 100); // yes button heartbeat
     }
   }
 });
-</script>
 
+// --- Sparkle Effect ---
+function createSparkle(count){
+  for(let i=0;i<count;i++){
+    const spark = document.createElement("div");
+    spark.className="heart";
+    spark.style.left=Math.random()*window.innerWidth+"px";
+    spark.style.top=Math.random()*window.innerHeight+"px";
+    spark.style.width="15px";
+    spark.style.height="15px";
+    spark.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+    document.body.appendChild(spark);
+    setTimeout(()=>spark.remove(),1200);
+  }
+}
+</script>
 </body>
 </html>
