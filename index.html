@@ -1,54 +1,128 @@
-/* --- Modal --- */
-#modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: rgba(255, 255, 255, 0.95);
-  padding: 25px 30px;        /* More padding for readability */
-  border-radius: 16px;
-  box-shadow: 0 0 35px rgba(255, 77, 109, 0.7);
-  color: #333;
-  max-width: 500px;          /* Wider box for laptops */
-  width: 90%;                /* Responsive for smaller screens */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Stuti 💖</title>
+<style>
+/* --- Body & Fonts --- */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
   text-align: center;
-  z-index: 50;
-  display: none;
-  opacity: 0;
-  transition: all 0.4s ease;
-  line-height: 1.6;          /* Better line spacing */
-  word-wrap: break-word;     /* Prevent text overflow */
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
 
-#modal.show {
-  display: block;
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+/* --- Headings --- */
+h1 {
+  color: #fff;
+  font-size: 2.2rem;
+  margin: 20px;
+  text-shadow: 1px 1px 5px #ff4d6d;
 }
 
-#modalClose {
-  display: inline-block;
-  margin-top: 20px;          /* Slightly more spacing from text */
-  padding: 8px 16px;         /* Slightly bigger button */
-  font-size: 1rem;
-  border: none;
-  border-radius: 10px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* --- Landing Page --- */
+#landing {
+  position: absolute;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index: 20;
+  color:white;
+  background: linear-gradient(135deg, #ff9a9e 0%, #ff6a88 50%, #ff4d6d 100%);
 }
-
-#modalClose:hover {
+#landing button {
+  width:180px;
+  padding:12px 0;
+  font-size:1.3rem;
+  border:none;
+  border-radius:12px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  transition: transform 0.2s;
+}
+#landing button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(255, 77, 109, 0.6);
 }
 
-/* Mobile Adjustments */
-@media (max-width: 600px) {
-  #modal {
-    padding: 20px 15px;
-    max-width: 90%;
-    width: 95%;
-  }
+/* --- Main Content --- */
+#mainContent {
+  display:none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
 }
+
+/* --- Buttons --- */
+#button-container {
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-top:30px;
+  position: relative;
+}
+button {
+  width:160px;
+  font-size:1.2rem;
+  padding:12px 0;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  transition: transform 0.2s, width 0.2s, height 0.2s, box-shadow 0.2s;
+}
+#yes {
+  background-color:#ff4d6d;
+  color:white;
+}
+#no {
+  background-color:#6c757d;
+  color:white;
+  position:relative;
+}
+button:hover {
+  transform: scale(1.05);
+}
+
+/* --- Toast --- */
+.toast {
+  position:absolute;
+  background: rgba(255,255,255,0.95);
+  color:#333;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:0.95rem;
+  top:100%;
+  left:50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition: opacity 0.3s;
+}
+
+/* --- Heartbeat Animation --- */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25%, 75% { transform: scale(1.1); }
+  50% { transform: scale(1.2); }
+}
+.heartbeat {
+  animation: heartbeat 1s infinite;
+  box-shadow: 0 0 20px rgba(255,77,109,0.7);
+}
+
+/* --- Beating Hearts --- */
+.heart {
+  position:absolute;
+  width:20px;
+  height:20px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c
