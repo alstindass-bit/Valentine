@@ -48,9 +48,7 @@ h1 {
   cursor:pointer;
   transition: transform 0.2s;
 }
-#landing button:hover {
-  transform: scale(1.05);
-}
+#landing button:hover { transform: scale(1.05); }
 
 /* --- Main Content --- */
 #mainContent {
@@ -79,18 +77,9 @@ button {
   cursor:pointer;
   transition: transform 0.2s, width 0.2s, height 0.2s, box-shadow 0.2s;
 }
-#yes {
-  background-color:#ff4d6d;
-  color:white;
-}
-#no {
-  background-color:#6c757d;
-  color:white;
-  position:relative;
-}
-button:hover {
-  transform: scale(1.05);
-}
+#yes { background-color:#ff4d6d; color:white; }
+#no { background-color:#6c757d; color:white; position:relative; }
+button:hover { transform: scale(1.05); }
 
 /* --- Toast --- */
 .toast {
@@ -110,19 +99,187 @@ button:hover {
 }
 
 /* --- Heartbeat Animation --- */
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  25%, 75% { transform: scale(1.1); }
-  50% { transform: scale(1.2); }
-}
-.heartbeat {
-  animation: heartbeat 1s infinite;
-  box-shadow: 0 0 20px rgba(255,77,109,0.7);
-}
+@keyframes heartbeat { 0%,100% { transform: scale(1); } 25%,75% { transform: scale(1.1); } 50% { transform: scale(1.2); } }
+.heartbeat { animation: heartbeat 1s infinite; box-shadow: 0 0 20px rgba(255,77,109,0.7); }
 
 /* --- Beating Hearts --- */
 .heart {
   position:absolute;
   width:20px;
   height:20px;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path fill="pink" d="M23.6,0c-2.9,0-5.4,1.7-6.6,4.1C15.8,1.7,13.3,0,10.4,0C4.7,0,0,4.7,0,10.4c0,6.5,6.4,11.8,16,19.2 c9.6-7.4,16-12.7,16-19.2C32,4.7,27.3,0,23.6,0z"/></svg>') no-repeat center;
+  background-size: contain;
+  animation: beat 1s infinite;
+  opacity:0.7;
+}
+@keyframes beat { 0%,100% {transform: scale(1);} 50% {transform: scale(1.4);} }
+
+/* --- Modal --- */
+#modal {
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%) scale(0.8);
+  background: rgba(255,255,255,0.95);
+  padding:25px 30px;
+  border-radius:16px;
+  box-shadow:0 0 35px rgba(255,77,109,0.7);
+  color:#333;
+  max-width:500px;
+  width:90%;
+  text-align:center;
+  z-index:50;
+  display:none;
+  opacity:0;
+  transition: all 0.4s ease;
+  line-height:1.6;
+  word-wrap:break-word;
+}
+#modal.show { display:block; opacity:1; transform:translate(-50%,-50%) scale(1); }
+#modalClose {
+  display:inline-block;
+  margin-top:20px;
+  padding:8px 16px;
+  font-size:1rem;
+  border:none;
+  border-radius:10px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#modalClose:hover { transform: scale(1.05); box-shadow:0 0 12px rgba(255,77,109,0.6); }
+
+/* --- Mobile --- */
+@media(max-width:600px){
+  #button-container { flex-direction: column; }
+  button { width:140px; }
+  .toast { top:auto; bottom:-40px; transform:translateX(-50%);}
+  #modal { padding:20px 15px; max-width:90%; width:95%; }
+}
+</style>
+</head>
+<body>
+
+<div id="landing">
+  <h1>Press Play to Continue 💖</h1>
+  <button id="playBtn">Play 🎵</button>
+</div>
+
+<div id="mainContent">
+  <h1>Stuti, will you be my Valentine? 💘</h1>
+  <div id="button-container">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No 😏</button>
+  </div>
+</div>
+
+<div id="modal">
+  <div id="modalContent">
+    <p id="modalText"></p>
+    <button id="modalClose">Close</button>
+  </div>
+</div>
+
+<audio id="song" src="Justin Bieber - Love Me.mp3" preload="auto"></audio>
+
+<script>
+const landing = document.getElementById("landing");
+const mainContent = document.getElementById("mainContent");
+const playBtn = document.getElementById("playBtn");
+const song = document.getElementById("song");
+
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modalClose");
+const modalText = document.getElementById("modalText");
+
+let noClicks = 0;
+const messages = [
+  "Hmm… I don’t think so. 😌",
+  "Still not an option. 💕",
+  "You’re clicking the wrong one. 😏",
+  "This is it… No’s officially off the table 😏✨"
+];
+
+playBtn.addEventListener("click", async () => {
+  landing.style.display="none";
+  mainContent.style.display="flex";
+
+  try {
+    song.currentTime = 48;
+    await song.play();
+    song.volume=0.4;
+    song.addEventListener("timeupdate", ()=>{
+      if(song.currentTime>=79) song.currentTime=48;
+    });
+  } catch(e){ console.warn("Audio play blocked. Tap Play again."); }
+
+  setInterval(()=>{
+    const heart = document.createElement("div");
+    heart.className="heart";
+    heart.style.left=Math.random()*window.innerWidth+"px";
+    heart.style.top=Math.random()*window.innerHeight+"px";
+    heart.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+  },400);
+});
+
+yesBtn.addEventListener("click", ()=>{
+  if(noClicks<messages.length){
+    modalText.innerHTML = "This is everything. 💖<br>\
+Your yes just lit fireworks in my heart, and I never want this moment to end.<br>\
+I\'ll treasure this forever, holding your heart close to mine, and whispering all the love I have for you every single day. 💕";
+  } else {
+    modalText.innerHTML = "Told ya… I was the only option! 💖 and so are you 💖<br>\
+Remember when you said I\'m “not romantic enough”? Consider this my grand proof.<br>\
+Lucky for you, I actually love trying to impress you.<br>\
+Happy Valentine’s! 💕";
+  }
+  modal.classList.add("show");
+  createSparkle(5);
+  yesBtn.classList.add("heartbeat");
+});
+
+modalClose.addEventListener("click", ()=>{ modal.classList.remove("show"); });
+
+noBtn.addEventListener("click", ()=>{
+  if(noClicks<messages.length){
+    const toast=document.createElement("div");
+    toast.className="toast";
+    toast.textContent=messages[noClicks];
+    noBtn.appendChild(toast);
+    setTimeout(()=>toast.style.opacity=1,10);
+    setTimeout(()=>toast.style.opacity=0,2000);
+
+    if(navigator.vibrate) navigator.vibrate(150);
+
+    let scale = 1 - 0.1*(noClicks+1);
+    noBtn.style.transform = `scale(${scale})`;
+
+    noClicks++;
+    if(noClicks===messages.length){
+      setTimeout(()=>noBtn.remove(),2200);
+      setTimeout(()=>yesBtn.classList.add("heartbeat"),100);
+    }
+  }
+});
+
+function createSparkle(count){
+  for(let i=0;i<count;i++){
+    const spark=document.createElement("div");
+    spark.className="heart";
+    spark.style.left=Math.random()*window.innerWidth+"px";
+    spark.style.top=Math.random()*window.innerHeight+"px";
+    spark.style.width="15px";
+    spark.style.height="15px";
+    spark.style.animationDuration=(0.8 + Math.random()*0.6)+"s";
+    document.body.appendChild(spark);
+    setTimeout(()=>spark.remove(),1200);
+  }
+}
+</script>
+</body>
+</html>
